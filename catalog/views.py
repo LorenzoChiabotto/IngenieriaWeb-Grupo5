@@ -1,10 +1,12 @@
 from django.contrib.auth.models import User, auth
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+
 from django.contrib import messages
 from webChat import settings
 from django.core.mail import send_mail
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
-from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse
 from django.template.loader import render_to_string
@@ -19,10 +21,7 @@ from django.shortcuts import render,redirect
 
 
 def home(request):
-    name = 'Manu'
-    apellid = 'Ellocodelrenderizado'
-
-    return render(request, 'home.html', {'prueba_manuel': name,'loco':apellid})
+    return render(request, 'home.html')
 
 def login(request):
     if request.method == 'GET':
@@ -30,14 +29,12 @@ def login(request):
     if request.method == 'POST':
         user = request.POST['ingreso']
         password1 = request.POST['pass1']
-        user = auth.authenticate(username=user, password=password1)
-        print(user)
+        user = authenticate(username=user, password=password1)
         if user is not None:
+            auth.login(request, user)
             if user.is_active:
-                #Ya confirmo la cuenta y cumple las condiciones esperadas
                 return redirect('chat_rooms')
             else:
-                # No tiene la cuenta activa
                 return redirect('login')
         else:
             messages.warning(request,'Por favor ingrese un nombre de usuario y contraseña correctos')
@@ -48,6 +45,7 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect('/')
+@login_required(login_url='/login/')
 def chat_rooms(request):
     return render(request, 'chat_rooms.html')
 
@@ -63,9 +61,6 @@ def signup(request):
         mail = request.POST["mail"]
         pass1 = request.POST["pass1"]
         pass2 = request.POST["pass2"]
-        print(username)
-        print(mail)
-        print(pass1)
         if (pass1 == pass2):
             user = User.objects.create_user(username, mail, pass1)
             user.is_active = False
