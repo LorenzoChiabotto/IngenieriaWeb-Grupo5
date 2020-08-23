@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .login_form import SignUpForm
+
 UserModel = get_user_model()
 
 from django.shortcuts import render,redirect
@@ -32,7 +33,12 @@ def login(request):
         user = auth.authenticate(username=user, password=password1)
         print(user)
         if user is not None:
+            if user.is_active:
+                #Ya confirmo la cuenta y cumple las condiciones esperadas
                 return redirect('chat_rooms')
+            else:
+                # No tiene la cuenta activa
+                return redirect('login')
         else:
             messages.warning(request,'Por favor ingrese un nombre de usuario y contraseña correctos')
             return redirect('login')
@@ -62,6 +68,7 @@ def signup(request):
         print(pass1)
         if (pass1 == pass2):
             user = User.objects.create_user(username, mail, pass1)
+            user.is_active = False
             user.save()
             current_site = get_current_site(request)
             mail_subject = 'Activación Cuenta'
