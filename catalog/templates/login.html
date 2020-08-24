@@ -4,12 +4,13 @@
     <meta charset="utf-8">
     <title>Iniciar sesión</title>
 </head>
+<a href="/">Volver al home</a>
 <body>
 <h2>Iniciar sesión</h2>
 <form action="." method="POST">
     {% csrf_token %}
     {{ form_login.as_p }}
-     <input type="submit" value="Iniciar sesión">
+    <input type="submit" value="Iniciar sesión">
 
 </form>
 </body>
