@@ -6,13 +6,9 @@
 </head>
 <body>
 <h2>Iniciar sesión</h2>
-<form method="POST">
+<form action="." method="POST">
     {% csrf_token %}
-    <table>
-        <input type="text" name ="ingreso"  placeholder="Ingrese Mail o Usuario"><br/>
-
-        <input type="password" name ="pass1" placeholder="Contraseña"><br/>
-    </table>
+    {{ form_login.as_p }}
      <input type="submit" value="Iniciar sesión">
 
 </form>

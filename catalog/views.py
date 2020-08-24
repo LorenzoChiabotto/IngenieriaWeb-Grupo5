@@ -1,70 +1,72 @@
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth import get_user_model
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import get_user_model, authenticate, login
 from django.contrib.auth.decorators import login_required
-
 from django.contrib import messages
-from webChat import settings
-from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from .login_form import SignUpForm
 
-UserModel = get_user_model()
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+
+from django.core.mail import send_mail
+
+from django.template.loader import render_to_string
 
 from django.shortcuts import render,redirect
 
+from django.http import HttpResponse
 
+from catalog.forms import SignUp, Login
+from webChat import settings
 
 def home(request):
     return render(request, 'home.html')
 
 def login(request):
-    if request.method == 'GET':
-        return render(request, 'login.html')
+    auth.logout(request)
+    form_login = Login()
     if request.method == 'POST':
-        user = request.POST['ingreso']
-        password1 = request.POST['pass1']
-        user = authenticate(username=user, password=password1)
-        if user is not None:
-            auth.login(request, user)
-            if user.is_active:
-                return redirect('chat_rooms')
+        form_login = Login(request.POST)
+        if form_login.is_valid():
+            username = form_login.cleaned_data['user']
+            password = form_login.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                auth.login(request, user)
+                if user.is_active:
+                    return redirect('chat_rooms')
+                else:
+                    return redirect('waitingConfirmation')
             else:
-                return redirect('login')
-        else:
-            messages.warning(request,'Por favor ingrese un nombre de usuario y contraseña correctos')
-            return redirect('login')
-    else:
-        return render(request, 'login.html')
+                messages.warning(request,'Por favor ingrese un nombre de usuario y contraseña correctos')
+    return render(request, 'login.html', {'form_login': form_login})
 
+@login_required(login_url='/login/')
 def logout(request):
     auth.logout(request)
     return redirect('/')
+
 @login_required(login_url='/login/')
 def chat_rooms(request):
     return render(request, 'chat_rooms.html')
 
 def waitingConfirmation(request):
     return render(request, 'waitingConfirmation.html')
-def active_email(request):
-    return render(request, 'active_email.html')
+
 def signup(request):
-    if request.method == 'GET':
-        return render(request, 'signup.html')
+    auth.logout(request)
+    form_signup = SignUp()
     if request.method == 'POST':
-        username = request.POST["usuario"]
-        mail = request.POST["mail"]
-        pass1 = request.POST["pass1"]
-        pass2 = request.POST["pass2"]
-        if (pass1 == pass2):
-            user = User.objects.create_user(username, mail, pass1)
-            user.is_active = False
-            user.save()
+        form_signup = SignUp(request.POST)
+        if form_signup.is_valid():
+            user = form_signup.cleaned_data['user']
+            email = form_signup.cleaned_data['email']
+            password = form_signup.cleaned_data['password']
+
+            user = User.objects.create_user(user, email, password)
+            #user.is_active = False
+            #user.save()
+
             current_site = get_current_site(request)
             mail_subject = 'Activación Cuenta'
             message = render_to_string('active_email.html', {
@@ -74,14 +76,15 @@ def signup(request):
                 'token': default_token_generator.make_token(user),
             })
             email_from = settings.EMAIL_HOST_USER
-            recipient_list = [mail]
+            recipient_list = [email]
             send_mail(mail_subject, message, email_from, recipient_list)
+
             return render(request, 'waitingConfirmation.html')
-    else:
-        form = SignUpForm()
-    return render(request, 'signup.html', {'form': form})
+
+    return render(request, 'signup.html', {'form_signup': form_signup})
 
 def activate(request, uidb64, token):
+    UserModel = get_user_model()
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
         user = UserModel._default_manager.get(pk=uid)
