@@ -130,3 +130,4 @@ EMAIL_HOST_USER ="tusitioWebChat@gmail.com"
 EMAIL_HOST_PASSWORD = "Esternocleidomastoeideo2"
 
 django_heroku.settings(locals())
+
