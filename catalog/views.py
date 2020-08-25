@@ -18,6 +18,7 @@ from django.http import HttpResponse
 
 from catalog.forms import SignUp, Login
 from webChat import settings
+from catalog.models import User_validable
 
 def home(request):
     return render(request, 'home.html')
@@ -29,11 +30,11 @@ def login(request):
         form_login = Login(request.POST)
         if form_login.is_valid():
             username = form_login.cleaned_data['user']
-            password = form_login.cleaned_data['password']
+            password = form_login.cleaned_data['password']            
             user = authenticate(username=username, password=password)
             if user is not None:
                 auth.login(request, user)
-                if user.is_active:
+                if User_validable.objects.get(user=(user)).is_confirmed:
                     return redirect('chat_rooms')
                 else:
                     return redirect('waitingConfirmation')
@@ -64,6 +65,12 @@ def signup(request):
             password = form_signup.cleaned_data['password']
 
             user = User.objects.create_user(user, email, password)
+
+            token = default_token_generator.make_token(user)
+            user_validable = User_validable.objects.create(user=user, is_confirmed=False)
+            user_validable.token = token
+            user_validable.save()
+
             #user.is_active = False
             #user.save()
 
@@ -73,7 +80,7 @@ def signup(request):
                 'user': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': default_token_generator.make_token(user),
+                'token': token,
             })
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [email]
@@ -90,9 +97,12 @@ def activate(request, uidb64, token):
         user = UserModel._default_manager.get(pk=uid)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
-    if user is not None and default_token_generator.check_token(user, token):
-        user.is_active = True
-        user.save()
-        return HttpResponse('Gracias por su confirmación por correo electrónico. Ahora puede iniciar sesión en su cuenta')
-    else:
-        return HttpResponse('El enlace de activación no es válido.')
+    print(default_token_generator.check_token(user, token))
+    if user is not None:
+        user_validable = User_validable.objects.get(user=(user))
+        if(token == user_validable.token):
+            user_validable.is_confirmed = True
+            user_validable.save()
+            return HttpResponse('Gracias por su confirmación por correo electrónico. Ahora puede iniciar sesión en su cuenta')
+    
+    return HttpResponse('El enlace de activación no es válido.')
