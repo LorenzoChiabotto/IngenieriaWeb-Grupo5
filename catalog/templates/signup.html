@@ -1,17 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Nuevo Usuario</title>
-</head>
-<body>
-<a href="/">Volver al home</a>
-<h2>Registro de usuario</h2>
-<form action="." method="POST">
-    {% csrf_token %}
-    {{ form_signup.as_p }}
-     <input type="submit" value="Registrar">
+{%extends "base.html" %}
+{% block content %}
+<div class="container-center">
+    <div class="card signup-login">
+        <div class="card-body">
+            <h5 class="card-title">Registro de usuario</h5>
+            <form action="." method="POST">
+                {% csrf_token %}
+                {% for field in form_signup %}
+                    <div class="form-group">
+                        <label>{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <input class="btn btn-primary btn-lg btn-block primaryHighligthColor primaryHighligthBorderColor" type="submit" value="Registrar">
+            </form>
+            <div class="p-2 w-100 mb-1 text-center"><a href="/login">You already have an account?</a></div>
+        </div>
+    </div>
+</div>
 
-</form>
-</body>
-</html>
+{% endblock %}

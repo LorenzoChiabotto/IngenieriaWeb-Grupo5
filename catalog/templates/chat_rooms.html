@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Rooms</title>
-</head>
-<body>
-    <h1>This is the chatroom view</h1>
-    <a href="/logout">Cerrar Sesion</a>
+{%extends "base.html" %}
+{% block content %}
 
-</body>
-</html>
+    <div class="container-center">
+        <h3 class="display-3">This is the chatroom view!</h3>
+    
+        <div class="d-inline p-2 primaryHighligthColor text-white w-100 mb-1 text-center"><a class= "text-white" href="/">Go back!</a></div>
+    </div>
+    
+
+{% endblock %}

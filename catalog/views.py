@@ -47,7 +47,6 @@ def logout(request):
     auth.logout(request)
     return redirect('/')
 
-@login_required(login_url='/login/')
 def chat_rooms(request):
     return render(request, 'chat_rooms.html')
 
@@ -106,3 +105,8 @@ def activate(request, uidb64, token):
             return HttpResponse('Gracias por su confirmación por correo electrónico. Ahora puede iniciar sesión en su cuenta')
     
     return HttpResponse('El enlace de activación no es válido.')
+
+
+@login_required(login_url='/login/')
+def construction(request):
+    return render(request, 'construction.html')

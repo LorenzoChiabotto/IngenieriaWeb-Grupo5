@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>WEBCHAT</title>
-</head>
-<body>
-<h1>WEBCHAT</h1>
-<div id = "Probando">
-    <a href="/login">Iniciar sesión</a>
-    <a href="/signup">Registrarse</a>
+
+{%extends "base.html" %}
+{% block content %}
+
+<div class="container-center">
+    
+    <h3 class="display-3">Welcome to <span class="font-weight-bold">webChat!</span></h3>
+
+    <div class="d-inline p-2 primaryHighligthColor text-white w-100 mb-1 text-center"><a class= "text-white" href="/login">Start chatting!</a></div>
+    <div class="d-inline p-2 primaryHighligthColor text-white w-100 mb-1 text-center"><a class= "text-white" href="/signup">Registrarse</a></div>
 </div>
-</body>
-</html>
+
+{% endblock %}

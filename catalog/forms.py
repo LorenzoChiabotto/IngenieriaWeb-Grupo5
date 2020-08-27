@@ -3,10 +3,10 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 class SignUp(forms.Form):
-    user = forms.CharField(max_length=20)
-    email = forms.EmailField(required=True)
-    password = forms.CharField(min_length=8,max_length=20,widget=forms.PasswordInput)
-    confirm_password = forms.CharField(min_length=8,max_length=20,widget=forms.PasswordInput)
+    user = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'class':'form-control'}))
+    email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'class':'form-control'}))
+    password = forms.CharField(min_length=8,max_length=20,widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    confirm_password = forms.CharField(min_length=8,max_length=20,widget=forms.PasswordInput(attrs={'class':'form-control'}))
 
     def clean_confirm_password(self):
         password = self.cleaned_data['password']
@@ -24,5 +24,5 @@ class SignUp(forms.Form):
 
 
 class Login(forms.Form):
-    user = forms.CharField(max_length=50)
-    password = forms.CharField(max_length=20,widget=forms.PasswordInput)
+    user = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'form-control'}))
+    password = forms.CharField(max_length=20,widget=forms.PasswordInput(attrs={'class':'form-control'}))

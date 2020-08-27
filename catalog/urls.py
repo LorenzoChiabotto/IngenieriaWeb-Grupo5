@@ -13,4 +13,5 @@ urlpatterns = [
     path('waitingConfirmation/', views.waitingConfirmation, name='waitingConfirmation'),
     path('chat_rooms/',views.chat_rooms, name='chat_rooms'),
     path('activate/<uidb64>/<token>/', views.activate, name='activate'),
+    path('construction/', views.construction, name='construction'),
 ]

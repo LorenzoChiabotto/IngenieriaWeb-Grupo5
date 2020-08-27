@@ -1,0 +1,27 @@
+html body{
+    height: 100%;
+    width: 100%;
+}
+
+.container-center{
+    display: flex;
+    width: 100%;
+    margin: 15px;
+    justify-content: space-evenly;
+    flex-direction:column;
+    align-items:center;
+    align-content:space-around;
+}
+.signup-login{
+    width: 50%;
+}
+
+.primaryColor{
+    background-color: rgb(211, 69, 140) !important;
+}
+.primaryHighligthColor{
+    background-color: rgb(211, 69, 140) !important;
+}
+.primaryHighligthBorderColor{
+    border-color: rgb(211, 69, 140) !important;
+}
