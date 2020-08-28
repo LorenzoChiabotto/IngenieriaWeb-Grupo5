@@ -1,0 +1,77 @@
+{%extends "base.html" %}
+{% block content %}
+<div class="container-center">
+    <div class="card signup-login">
+        <div class="card-body shadow-lg p-3 bg-white rounded">
+            <h3 class="card-title">{{user.username}}</h3>
+            <div class="circle" >
+                <img src="https://picsum.photos/2000" class="img-fluid" alt="Responsive image">
+            </div>
+
+            <br>
+            <div class="form-group">
+                <label type="email" class="text-black-50">Username</label>
+                <br>
+                <label type="password">{{user.username}}</label>
+            </div>
+
+            <div class="form-group">
+                <label type="email" class="text-black-50">Email</label>
+                <br>
+                <label type="password">{{user.email}}</label>
+            </div>
+
+            <div class="form-group">
+                <label type="email" class="text-black-50">Password</label>
+                <br>
+                <label type="password">**********</label>
+            </div>
+
+            
+            <div class="form-group">
+                <label type="email" class="text-black-50">Tags followed</label>
+                <br>
+                
+                <div class="badge badge-pill badge-primary p-0"> 
+                    <a href="#" class="text-decoration-none text-white m-3">Primary </a>
+                    <button class="h-100 w-wrap rounded-right rounded-lg bg-light btn-sm btn border border-primary">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="badge badge-pill badge-primary p-0"> 
+                    <a href="#" class="text-decoration-none text-white m-3">Primary </a>
+                    <button class="h-100 w-wrap rounded-right rounded-lg bg-light btn-sm btn border border-primary">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="badge badge-pill badge-primary p-0"> 
+                    <a href="#" class="text-decoration-none text-white m-3">Primary </a>
+                    <button class="h-100 w-wrap rounded-right rounded-lg bg-light btn-sm btn border border-primary">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="badge badge-pill badge-primary p-0 mb-1 mt-1"> 
+                    <a href="#" class="text-decoration-none text-white m-3">Primary </a>
+                    <button class="h-100 w-wrap rounded-right rounded-lg bg-light btn-sm btn border border-primary">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="badge badge-pill badge-primary p-0"> 
+                    <a href="#" class="text-decoration-none text-white m-3">Primary </a>
+                    <button class="h-100 w-wrap rounded-right rounded-lg bg-light btn-sm btn border border-primary">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="badge badge-pill badge-primary p-0"> 
+                    <a href="#" class="text-decoration-none text-white m-3">Primary </a>
+                    <button class="h-100 w-wrap rounded-right rounded-lg bg-light btn-sm btn border border-primary">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

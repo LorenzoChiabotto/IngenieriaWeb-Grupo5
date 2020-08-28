@@ -96,7 +96,6 @@ def activate(request, uidb64, token):
         user = UserModel._default_manager.get(pk=uid)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
-    print(default_token_generator.check_token(user, token))
     if user is not None:
         user_validable = User_validable.objects.get(user=(user))
         if(token == user_validable.token):
@@ -110,3 +109,8 @@ def activate(request, uidb64, token):
 @login_required(login_url='/login/')
 def construction(request):
     return render(request, 'construction.html')
+
+
+@login_required(login_url='/login/')
+def profile(request):
+    return render(request, 'profile.html')
