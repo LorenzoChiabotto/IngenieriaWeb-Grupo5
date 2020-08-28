@@ -26,3 +26,14 @@ html body{
 .primaryHighligthBorderColor{
     border-color: rgb(211, 69, 140) !important;
 }
+
+.circle{
+    max-width: 300px;
+    max-height: 300px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.circle img{    
+    border-radius: 50%;
+}
