@@ -16,7 +16,7 @@ from django.shortcuts import render,redirect
 
 from django.http import HttpResponse
 
-from catalog.forms import SignUp, Login
+from catalog.forms import SignUp, Login, New_Chatroom
 from webChat import settings
 from catalog.models import User_validable
 
@@ -114,3 +114,9 @@ def construction(request):
 @login_required(login_url='/login/')
 def profile(request):
     return render(request, 'profile.html')
+
+    
+@login_required(login_url='/login/')
+def create_chat_room(request):
+    form_new_chatroom = New_Chatroom()
+    return render(request, 'create_chat_room.html', {'form_new_chatroom': form_new_chatroom})

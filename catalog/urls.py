@@ -14,4 +14,5 @@ urlpatterns = [
     path('chat_rooms/',views.chat_rooms, name='chat_rooms'),
     path('activate/<uidb64>/<token>/', views.activate, name='activate'),
     path('profile/', views.profile, name='profile'),
+    path('chat_rooms/create', views.create_chat_room, name='create_chat_room'),
 ]

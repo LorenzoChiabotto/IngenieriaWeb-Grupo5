@@ -1,0 +1,36 @@
+{%extends "base.html" %}
+{% block content %}
+
+<div class="container-center ">
+    <div class="card signup-login">
+        <div class="card-body shadow-lg p-3 bg-white rounded">
+        <h5 class="card-title">Create chatroom</h5>
+    
+        <form action="." method="POST">
+            {% csrf_token %}
+            {% for field in form_new_chatroom %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {% if field.label == "Tags" %}
+                <div class="badge badge-pill badge-primary p-0 m-1"> 
+                    <a href="#" class="text-decoration-none text-white m-3">Primary </a>
+                    <button class="h-100 w-wrap rounded-right rounded-lg bg-light btn-sm btn border border-primary">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="badge badge-pill badge-primary p-0 m-1"> 
+                    <a href="#" class="text-decoration-none text-white m-3">Primary </a>
+                    <button class="h-100 w-wrap rounded-right rounded-lg bg-light btn-sm btn border border-primary">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {%endif%}
+            </div>
+            {% endfor %}
+                    <input type="submit" value="Crear sala" class="btn btn-primary btn-lg btn-block primaryHighligthColor primaryHighligthBorderColor">
+                
+
+                
+
+{% endblock %}

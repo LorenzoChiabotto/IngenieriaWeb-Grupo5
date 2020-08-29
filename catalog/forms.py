@@ -1,6 +1,8 @@
 from django import forms
+from django.forms import ModelForm,TextInput, Textarea, Select, SelectMultiple
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from catalog.models import Chatroom
 
 class SignUp(forms.Form):
     user = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'class':'form-control'}))
@@ -22,7 +24,21 @@ class SignUp(forms.Form):
         return password
 
 
-
 class Login(forms.Form):
     user = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'form-control'}))
     password = forms.CharField(max_length=20,widget=forms.PasswordInput(attrs={'class':'form-control'}))
+
+
+class New_Chatroom(ModelForm):
+    class Meta:
+        model = Chatroom
+        fields = ["name","description","tags","messages_per_minute","time_between_messages", "max_users", "duration"]
+        widgets = {
+            'name': TextInput(attrs={'class':'form-control'}),
+            'description': Textarea(attrs={'class':'form-control'}),
+            'tags': Select(attrs={'class':'form-control'}),
+            'messages_per_minute': TextInput(attrs={'class':'form-control'}),
+            'time_between_messages': TextInput(attrs={'class':'form-control'}),
+            'max_users': TextInput(attrs={'class':'form-control'}),
+            'duration': TextInput(attrs={'class':'form-control'}),
+        }
