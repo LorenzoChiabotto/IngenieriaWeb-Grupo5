@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'catalog.apps.CatalogConfig',
+    'captcha'
 
 ]
 ACCOUNT_ACTIVATION_DAYS = 7
@@ -127,5 +128,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER ="tusitioWebChat@gmail.com"
 EMAIL_HOST_PASSWORD = "Esternocleidomastoeideo2"
 
+#RECAPTCHA_PUBLIC_KEY = ''
+#RECAPTCHA_PRIVATE_KEY = ''
+SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 django_heroku.settings(locals())

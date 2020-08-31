@@ -3,12 +3,15 @@ from django.forms import ModelForm,TextInput, Textarea, Select, SelectMultiple
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from catalog.models import Chatroom
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
 
 class SignUp(forms.Form):
     user = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'class':'form-control'}))
     email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'class':'form-control'}))
     password = forms.CharField(min_length=8,max_length=20,widget=forms.PasswordInput(attrs={'class':'form-control'}))
     confirm_password = forms.CharField(min_length=8,max_length=20,widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox)
 
     def clean_confirm_password(self):
         password = self.cleaned_data['password']

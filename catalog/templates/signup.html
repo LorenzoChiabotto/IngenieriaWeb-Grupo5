@@ -7,14 +7,20 @@
             <form action="." method="POST">
                 {% csrf_token %}
                 {% for field in form_signup %}
+                {% if field.label == 'Captcha' %}
+                <div class="form-group container-center">
+                    {{ field }}
+                </div>
+                {%else%}
                     <div class="form-group">
                         <label>{{ field.label }}</label>
                         {{ field }}
                     </div>
+                {%endif%}
                 {% endfor %}
                 <input class="btn btn-primary btn-lg btn-block primaryHighligthColor primaryHighligthBorderColor" type="submit" value="Registrar">
             </form>
-            <div class="p-2 w-100 mb-1 text-center"><a href="/login">You already have an account?</a></div>
+            <div class="p-2 w-100 mb-1 text-center"><a href="/login">Do You have an account?</a></div>
         </div>
     </div>
 </div>

@@ -1,3 +1,4 @@
 django==3.1
 django-heroku
 gunicorn
+django-recaptcha==2.0.6
