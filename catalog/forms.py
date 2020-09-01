@@ -1,8 +1,8 @@
 from django import forms
-from django.forms import ModelForm,TextInput, Textarea, Select, SelectMultiple
+from django.forms import ModelForm,TextInput, Textarea, ModelChoiceField
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from catalog.models import Chatroom
+from catalog.models import Chatroom, Tag
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 
@@ -33,13 +33,13 @@ class Login(forms.Form):
 
 
 class New_Chatroom(ModelForm):
+    tags = ModelChoiceField(queryset=Tag.objects.all()),
     class Meta:
         model = Chatroom
         fields = ["name","description","tags","messages_per_minute","time_between_messages", "max_users", "duration"]
         widgets = {
             'name': TextInput(attrs={'class':'form-control'}),
             'description': Textarea(attrs={'class':'form-control'}),
-            'tags': Select(attrs={'class':'form-control'}),
             'messages_per_minute': TextInput(attrs={'class':'form-control'}),
             'time_between_messages': TextInput(attrs={'class':'form-control'}),
             'max_users': TextInput(attrs={'class':'form-control'}),

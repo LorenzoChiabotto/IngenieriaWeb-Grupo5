@@ -18,7 +18,7 @@ from django.http import HttpResponse
 
 from catalog.forms import SignUp, Login, New_Chatroom, Chatroom
 from webChat import settings
-from catalog.models import User_validable
+from catalog.models import User_validable, Tag
 
 def home(request):
     return render(request, 'home.html')
@@ -121,7 +121,6 @@ def create_chat_room(request):
     form_new_chatroom = New_Chatroom()
     if request.method == 'POST':
         form_new_chatroom = New_Chatroom(request.POST)
-        print(form_new_chatroom.errors)
         if form_new_chatroom.is_valid():
             name = form_new_chatroom.cleaned_data['name']
             description = form_new_chatroom.cleaned_data['description']
@@ -130,9 +129,17 @@ def create_chat_room(request):
             time_between_messages = form_new_chatroom.cleaned_data['time_between_messages']
             max_users = form_new_chatroom.cleaned_data['max_users']
             duration = form_new_chatroom.cleaned_data['duration']
-            room = Chatroom.objects.create(name=name,description=description, tags = tags, messages_per_minute = messages_per_minute,
-                                               time_between_messages = time_between_messages, max_users=max_users,duration=duration)
+            room = Chatroom.objects.create(
+                name=name,
+                description=description,
+                messages_per_minute = messages_per_minute,
+                time_between_messages = time_between_messages,
+                max_users=max_users,
+                duration=duration)
 
+            room.administrator.set(User_validable.objects.filter(user=(request.user)))
+            room.save()
+            room.tags.set(Tag.objects.filter(id__in=tags))
             room.save()
             print("llegoooooooo")
 
