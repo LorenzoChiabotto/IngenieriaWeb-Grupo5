@@ -48,10 +48,14 @@ def logout(request):
     return redirect('/')
 
 def chat_rooms(request):
-    return render(request, 'chat_rooms.html')
+    rooms = Chatroom.objects.all()
+    contexto = {'rooms': rooms}
+    return render(request,'chat_rooms.html',contexto)
 
 def waitingConfirmation(request):
+
     return render(request, 'waitingConfirmation.html')
+
 
 def signup(request):
     auth.logout(request)

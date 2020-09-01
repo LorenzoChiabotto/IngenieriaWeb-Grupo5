@@ -3,9 +3,18 @@
 
     <div class="container-center">
         <h3 class="display-3">This is the chatroom view!</h3>
-    
+        {% if rooms %}
+        {% for room in rooms %}
+        <tr>
+            <td>SALA: {{room.name}} </td>
+            <button button type="button" class="btn btn-primary">Ingresar a la sala</button>
+
+        </tr>
+        {% endfor %}
+        {% else %}
+        <h1>No hay salas</h1>
+        {% endif %}
         <div class="d-inline p-2 primaryHighligthColor text-white w-100 mb-1 text-center"><a class= "text-white" href="/">Go back!</a></div>
     </div>
-    
 
 {% endblock %}
