@@ -6,7 +6,7 @@
         <div class="card-body shadow-lg p-3 bg-white rounded">
         <h5 class="card-title">Create chatroom</h5>
     
-        <form action="." method="POST">
+        <form method="POST" action="">
             {% csrf_token %}
             {% for field in form_new_chatroom %}
             <div class="form-group">
