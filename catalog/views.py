@@ -52,6 +52,10 @@ def chat_rooms(request):
     contexto = {'rooms': rooms}
     return render(request,'chat_rooms.html',contexto)
 
+def chat(request):
+
+    return render(request,'chat.html')
+
 def waitingConfirmation(request):
 
     return render(request, 'waitingConfirmation.html')

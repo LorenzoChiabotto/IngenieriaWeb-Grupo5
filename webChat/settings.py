@@ -132,4 +132,5 @@ EMAIL_HOST_PASSWORD = "Esternocleidomastoeideo2"
 #RECAPTCHA_PRIVATE_KEY = ''
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
+
 django_heroku.settings(locals())
