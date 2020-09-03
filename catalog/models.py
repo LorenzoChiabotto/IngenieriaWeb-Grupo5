@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Tag(models.Model):
     name = models.CharField(max_length=50)
@@ -10,8 +11,8 @@ class Tag(models.Model):
 class User_validable(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_confirmed = models.BooleanField(default=False)
-    token = models.CharField(max_length=255)    
-    followed_tags = models.ManyToManyField(Tag,  related_name="User_tags")
+    token = models.CharField(max_length=255, blank=True)    
+    followed_tags = models.ManyToManyField(Tag,  related_name="User_tags", blank=True)
     
     def __str__(self):
         return self.user.username
@@ -41,6 +42,7 @@ class Chatroom(models.Model):
     time_between_messages = models.IntegerField()
     max_users = models.IntegerField()
     duration = models.IntegerField()
+    created_at = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return self.name
 

@@ -37,3 +37,22 @@ html body{
 .circle img{    
     border-radius: 50%;
 }
+
+.flex-row-around{
+    display: flex;
+    width: 100%;
+    margin: 15px;
+    justify-content: space-around;
+    flex-direction:row;
+    align-items:center;
+}
+
+.flex-row-evenly{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    flex-direction:row;
+    align-items: flex-start;
+    align-content: space-around;
+    flex-wrap: wrap
+}

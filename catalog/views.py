@@ -16,6 +16,9 @@ from django.shortcuts import render,redirect
 
 from django.http import HttpResponse
 
+from datetime import timedelta
+from django.utils import timezone
+
 from catalog.forms import SignUp, Login, New_Chatroom, Chatroom
 from webChat import settings
 from catalog.models import User_validable, Tag
@@ -52,9 +55,6 @@ def chat_rooms(request):
     contexto = {'rooms': rooms}
     return render(request,'chat_rooms.html',contexto)
 
-def chat(request):
-
-    return render(request,'chat.html')
 
 def waitingConfirmation(request):
 
@@ -129,7 +129,7 @@ def create_chat_room(request):
     form_new_chatroom = New_Chatroom()
     if request.method == 'POST':
         form_new_chatroom = New_Chatroom(request.POST)
-        if form_new_chatroom.is_valid():
+        if form_new_chatroom.is_valid() and validate_max_chatrooms(request.user):
             name = form_new_chatroom.cleaned_data['name']
             description = form_new_chatroom.cleaned_data['description']
             tags = form_new_chatroom.cleaned_data['tags']
@@ -149,7 +149,20 @@ def create_chat_room(request):
             room.save()
             room.tags.set(Tag.objects.filter(id__in=tags))
             room.save()
-            print("llegoooooooo")
+            return redirect('chat')
 
 
     return render(request, 'create_chat_room.html', {'form_new_chatroom': form_new_chatroom})
+
+def chat(request):
+    return render(request,'chat.html')
+
+def validate_max_chatrooms(user):
+    x=0
+    user_chatrooms = Chatroom.objects.filter(administrator=User_validable.objects.get(user=User.objects.get(username=user)))
+    for chatroom in user_chatrooms:
+        if chatroom.created_at < timezone.now().__add__(timedelta(hours=chatroom.duration)):
+            x+=1
+        if(x >= 3):
+            return False
+    return True

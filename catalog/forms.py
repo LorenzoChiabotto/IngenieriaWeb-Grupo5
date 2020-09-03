@@ -5,6 +5,8 @@ from django.core.exceptions import ValidationError
 from catalog.models import Chatroom, Tag
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
+from datetime import date
+
 
 class SignUp(forms.Form):
     user = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'class':'form-control'}))
@@ -26,6 +28,9 @@ class SignUp(forms.Form):
             raise ValidationError("Mail ya existente")
         return password
 
+    def clean_captcha(self):
+        return self.cleaned_data['captcha']
+
 
 class Login(forms.Form):
     user = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'form-control'}))
@@ -40,8 +45,25 @@ class New_Chatroom(ModelForm):
         widgets = {
             'name': TextInput(attrs={'class':'form-control'}),
             'description': Textarea(attrs={'class':'form-control'}),
-            'messages_per_minute': TextInput(attrs={'class':'form-control'}),
-            'time_between_messages': TextInput(attrs={'class':'form-control'}),
-            'max_users': TextInput(attrs={'class':'form-control'}),
+            'messages_per_minute': TextInput(attrs={'class':'form-control', 'type':'number', 'min':'0'}),
+            'time_between_messages': TextInput(attrs={'class':'form-control', 'type':'number', 'min':'0'},),
+            'max_users': TextInput(attrs={'class':'form-control', 'type':'number', 'min':'1'}),
             'duration': TextInput(attrs={'class':'form-control'}),
         }
+
+        def clean_name(self):
+            print(self)
+            print(date.today())
+            x=1
+            User_chatrooms = Chatroom.objects.get(administrator=User.objects.filter(username=user))
+            for chatroom in User_chatrooms:
+                if chatroom.created_at > date.today():
+                    x+=1
+                if(x >= 3):
+                    raise ValidationError("You already have more than three chatrooms active")
+            print(date.today())
+            print(x)
+            return self.cleaned_data['name']
+
+                
+    
