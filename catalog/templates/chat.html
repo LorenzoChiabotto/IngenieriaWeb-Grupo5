@@ -1,21 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Chat</title>
-</head>
-<body>
-<div style="height:500px;width:100%;overflow-y:scroll" id="div_data">
+{%extends "base.html" %}
+{% block content %}
 
-</div>
-<div>
-    <input type="text" name="message" id="message" placeholder="Message" style="padding:10px;width:100%">
-    <input type="button" value="Send Message" id="send_message" style="background:#C03897;color:#fff;padding:10px;border:0px;width:100%">
-    <script>
-        var roomName='{{ room_name }}';
-        var personname='{{ person_name }}';
+<a href="/chat_rooms" class="btn btn-danger btn-lg btn-block w-25 m-2"> Leave </a>
 
-    </script>
+<div class="container-center message-box">
+    <div class="flex-row-around">
+        <div class="chat-box">
+            <textarea id="chat-log" class="w-100 h-50"></textarea><br>
+            <div class="send-messagge-box">
+                <input id="chat-message-input" type="text">
+                <input id="chat-message-submit" type="button" value=">>">
+            </div>
+        </div>
+        <div class="users-box">
+            <h5>Users</h5>
+            <ul>
+                {% for user in chat.users.all%}
+                <li>
+                    <a href="/profile/{{user.pk}}">{{user}}</a>
+                </li>
+                {%endfor%}
+            </ul>
+        </div>
+    </div>
 </div>
-</body>
-</html>
+{% endblock %}

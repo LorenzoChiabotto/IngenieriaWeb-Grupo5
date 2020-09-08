@@ -39,8 +39,6 @@ tagsList.on('change', function(){
         elementSelected = this.id
         $('#id_tags > [value='+elementSelected+']').attr("hidden", false)
         $('#id_tags > [value='+elementSelected+']').prop("selected", false);
-        //tagsList.getElementById(elementSelected).setAttribute
-        //console.log($('#id_tags > [value='+elementSelected+']').)
         this.closest('div').remove()
     })
 
@@ -48,36 +46,3 @@ tagsList.on('change', function(){
     
     tag.attr("hidden", true)
   });
-
-
-  /*
-  <div class="badge badge-pill badge-primary p-0 m-1"> 
-                    <a href="#" class="text-decoration-none text-white m-3">Primary </a>
-                    <button class="h-100 w-wrap rounded-right rounded-lg bg-light btn-sm btn border border-primary">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-
-                
-      var formData = new FormData(document.querySelector('form'))
-      console.log(formData.get('tags'))
-      tagsList = document.getElementById('tags').value = tagsSelected;
-      formData.set('tags',tagsSelected)
-      console.log(formData)
-      console.log(formData.getAll("tags"))
-      console.log(formData.get('description'))
-      formData.set('description','new descriptionnnnnn')
-      console.log(formData.get('description'))
-
-
-
-        form.addEventListener('submit',(event) => {
-      console.log(tagsSelected)
-      tagsList.value = tagsSelected
-      tagsList.set('tags',tagsSelected)
-      console.log(tagsList)
-      debugger
-    })
-
-  */

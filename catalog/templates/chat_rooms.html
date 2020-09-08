@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{room.name}}</h5>
                     <p class="card-text">{{room.description}}</p>
-                    <a href="chat" class="btn btn-primary primaryHighligthColor primaryHighligthBorderColor w-100">Enter to chat!</a>
+                    <a href="chat/{{room.pk}}" class="btn btn-primary primaryHighligthColor primaryHighligthBorderColor w-100">Enter to chat!</a>
                     
                     <div class="flex-row-evenly">
                         {% for tag in room.tags.all %}                

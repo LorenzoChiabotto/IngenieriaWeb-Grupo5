@@ -1,4 +1,5 @@
 {%extends "base.html" %}
+{% load static %}
 {% block content %}
 
 <div class="container-center ">
@@ -11,26 +12,26 @@
             {% for field in form_new_chatroom %}
             <div class="form-group">
                 <label>{{ field.label }}</label>
+                {% if field.errors %}
+                <div class="errorBorder">
+                    {{ field }}
+                </div>
+                <div class="errorMessagge">
+                    {{field.errors}}
+                </div>
+                {%else%}
+                {% if field.label != "Tags" %}
                 {{ field }}
-                {% if field.label == "Tags" %}
-                <div class="badge badge-pill badge-primary p-0 m-1"> 
-                    <a href="#" class="text-decoration-none text-white m-3">Primary </a>
-                    <button class="h-100 w-wrap rounded-right rounded-lg bg-light btn-sm btn border border-primary">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                {%else%}
+                {{ field }}
+                <div id="tagsContainer">
+
                 </div>
-                <div class="badge badge-pill badge-primary p-0 m-1"> 
-                    <a href="#" class="text-decoration-none text-white m-3">Primary </a>
-                    <button class="h-100 w-wrap rounded-right rounded-lg bg-light btn-sm btn border border-primary">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+                {%endif%}
                 {%endif%}
             </div>
             {% endfor %}
-                    <input type="submit" value="Crear sala" class="btn btn-primary btn-lg btn-block primaryHighligthColor primaryHighligthBorderColor">
-                
-
-                
-
+            <input type="submit" value="Create chatroom" class="btn btn-primary btn-lg btn-block primaryHighligthColor primaryHighligthBorderColor">
+               
+            <script src="{% static 'index.js' %}"></script>
 {% endblock %}

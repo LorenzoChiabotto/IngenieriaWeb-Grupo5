@@ -41,7 +41,7 @@ class Chatroom(models.Model):
     messages_per_minute = models.IntegerField()
     time_between_messages = models.IntegerField()
     max_users = models.IntegerField()
-    duration = models.IntegerField()
+    duration = models.IntegerField(blank=True,null=True)
     created_at = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return self.name

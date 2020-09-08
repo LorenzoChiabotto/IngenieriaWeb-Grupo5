@@ -20,13 +20,23 @@
                 <br>
                 <label type="password">{{user.user.email}}</label>
             </div>
+
+            <div class="form-group">
+                <label type="email" class="text-black-50">Password</label>
+                <br>
+                <label type="password">**********</label>
+            </div>
+
             
             <div class="form-group">
                 <label type="email" class="text-black-50">Tags followed</label>
                 <br>
                 {% for tag in user.followed_tags.all %}                
-                    <div class="badge badge-pill badge-primary p-1 mt-2"> 
-                        <a href="#" class="text-decoration-none text-white m-1">{{tag.name}} </a>
+                    <div class="badge badge-pill badge-primary p-0"> 
+                        <a href="#" class="text-decoration-none text-white m-3"> {{tag.name}} </a>
+                        <button class="h-100 w-wrap rounded-right rounded-lg bg-light btn-sm btn border border-primary">
+                            <span aria-hidden="true">X</span>
+                        </button>
                     </div>
                 {% endfor %}
                 

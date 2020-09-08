@@ -24,9 +24,17 @@ from webChat import settings
 from catalog.models import User_validable, Tag
 
 def home(request):
+    try:
+        request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
+    except:
+        pass
     return render(request, 'home.html')
 
 def login(request):
+    try:
+        request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
+    except:
+        pass
     auth.logout(request)
     form_login = Login()
     if request.method == 'POST':
@@ -51,7 +59,11 @@ def logout(request):
     return redirect('/')
 
 def chat_rooms(request):
-    rooms = Chatroom.objects.all()
+    try:
+        request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
+    except:
+        pass
+    rooms = list(filter(lambda chatroom: not chatroom.duration or (chatroom.created_at.__add__(timedelta(hours=chatroom.duration)) > timezone.now())  , Chatroom.objects.all()))
     contexto = {'rooms': rooms}
     return render(request,'chat_rooms.html',contexto)
 
@@ -116,16 +128,35 @@ def activate(request, uidb64, token):
 
 @login_required(login_url='/login/')
 def construction(request):
+    try:
+        request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
+    except:
+        pass
     return render(request, 'construction.html')
 
 
 @login_required(login_url='/login/')
-def profile(request):
-    return render(request, 'profile.html')
+def myProfile(request):
+    try:
+        request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
+    except:
+        pass
+    return render(request, 'myProfile.html')
+
+def profile(request, user_pk):
+    try:
+        user_viewed = User_validable.objects.get(pk=user_pk)
+    except:
+        pass
+    return render(request, 'profile.html',{"user":user_viewed})
 
     
 @login_required(login_url='/login/')
 def create_chat_room(request):
+    try:
+        request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
+    except:
+        pass
     form_new_chatroom = New_Chatroom()
     if request.method == 'POST':
         form_new_chatroom = New_Chatroom(request.POST)
@@ -145,21 +176,30 @@ def create_chat_room(request):
                 max_users=max_users,
                 duration=duration)
 
-            room.administrator.set(User_validable.objects.filter(user=(request.user)))
+            room.administrator.set(User_validable.objects.filter(user=(request.user.user)))
             room.save()
             room.tags.set(Tag.objects.filter(id__in=tags))
+            room.users.set([request.user])
             room.save()
-            return redirect('chat')
+            return redirect('chat',chat_pk=room.pk)
 
 
     return render(request, 'create_chat_room.html', {'form_new_chatroom': form_new_chatroom})
 
-def chat(request):
-    return render(request,'chat.html')
+def chat(request, chat_pk):
+    chat = Chatroom.objects.get(pk=chat_pk)
+    try:
+        request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
+        
+        chat.users.add(request.user)
+    except:
+        pass
+
+    return render(request,'chat.html', {"chat": chat})
 
 def validate_max_chatrooms(user):
     x=0
-    user_chatrooms = Chatroom.objects.filter(administrator=User_validable.objects.get(user=User.objects.get(username=user)))
+    user_chatrooms = Chatroom.objects.filter(administrator=user)
     for chatroom in user_chatrooms:
         if chatroom.created_at < timezone.now().__add__(timedelta(hours=chatroom.duration)):
             x+=1
