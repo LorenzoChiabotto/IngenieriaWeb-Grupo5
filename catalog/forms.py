@@ -51,19 +51,10 @@ class New_Chatroom(ModelForm):
             'duration': TextInput(attrs={'class':'form-control'}),
         }
 
-        def clean_name(self):
-            print(self)
-            print(date.today())
-            x=1
-            User_chatrooms = Chatroom.objects.get(administrator=User.objects.filter(username=user))
-            for chatroom in User_chatrooms:
-                if chatroom.created_at > date.today():
-                    x+=1
-                if(x >= 3):
-                    raise ValidationError("You already have more than three chatrooms active")
-            print(date.today())
-            print(x)
-            return self.cleaned_data['name']
-
-                
+    
+    def clean_duration(self):
+        duration = self.cleaned_data['duration']
+        if(not duration):
+            raise ValidationError("Duration is a required field")
+        return duration          
     
