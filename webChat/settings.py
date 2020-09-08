@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'catalog.apps.CatalogConfig',
+    'django_extensions',
     'captcha'
-
 ]
 ACCOUNT_ACTIVATION_DAYS = 7
 MIDDLEWARE = [
