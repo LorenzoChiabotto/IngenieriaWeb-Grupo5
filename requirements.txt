@@ -1,4 +1,6 @@
+django_extensions==3.0.9
 django-heroku
 gunicorn
 django==3.1
 django-recaptcha==2.0.6
+channels==2.4.0

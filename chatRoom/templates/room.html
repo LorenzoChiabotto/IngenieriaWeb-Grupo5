@@ -1,12 +1,15 @@
 {%extends "base.html" %}
+{% load static %}
 {% block content %}
-
+{{ request.user.id|json_script:"user_id" }}
+{{ request.user.user.username|json_script:"user_name" }}
+<link rel="stylesheet" href="{% static 'chatRoom/styles.css' %}">
 <a href="/chat_rooms" class="btn btn-danger btn-lg btn-block w-25 m-2"> Leave </a>
 
 <div class="container-center message-box">
     <div class="flex-row-around">
         <div class="chat-box">
-            <textarea id="chat-log" class="w-100 h-50"></textarea><br>
+            <div id="chat-log" class="w-100 h-50 pb-2 pt-2 overflow-auto" style="max-height: 50%"></div>
             <div class="send-messagge-box">
                 <input id="chat-message-input" type="text">
                 <input id="chat-message-submit" type="button" value=">>">
@@ -23,5 +26,6 @@
             </ul>
         </div>
     </div>
+    <script src="{% static 'chatRoom/chatHandler.js' %}"></script>
 </div>
 {% endblock %}

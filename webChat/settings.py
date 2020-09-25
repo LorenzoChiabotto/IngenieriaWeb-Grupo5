@@ -31,14 +31,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'catalog.apps.CatalogConfig',
     'django_extensions',
+    'catalog',
+    'chatRoom',
     'captcha'
 ]
 ACCOUNT_ACTIVATION_DAYS = 7
@@ -121,6 +123,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS= True
@@ -131,6 +134,23 @@ EMAIL_HOST_PASSWORD = "Esternocleidomastoeideo2"
 #RECAPTCHA_PUBLIC_KEY = ''
 #RECAPTCHA_PRIVATE_KEY = ''
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+
+
+ASGI_APPLICATION = 'webChat.routing.application'
+
+# CHANNEL_LAYERS = {
+# 'default': {
+#     'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#     'CONFIG': {
+#         "hosts": [('127.0.0.1', 6379)],
+#     },
+# },
+# }
+CHANNEL_LAYERS = {
+    'default': {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    },
+}
 
 
 django_heroku.settings(locals())

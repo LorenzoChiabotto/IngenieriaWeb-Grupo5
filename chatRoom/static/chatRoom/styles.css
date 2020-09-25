@@ -1,0 +1,16 @@
+#chat-log{
+    padding: 5px;
+}
+
+.chat-bubble{
+    border-radius: 15px;
+    width: 50%;
+    display: flex;
+    flex-direction: column; 
+}
+
+.chat-bubble .chat-message {
+    border-radius: 15px;
+    width: 98%;
+    align-self: center;
+}

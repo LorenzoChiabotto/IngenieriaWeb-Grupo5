@@ -26,6 +26,9 @@ html body{
 .primaryHighligthBorderColor{
     border-color: rgb(211, 69, 140) !important;
 }
+.primarySoftColor{
+    background-color: rgb(206, 118, 162);
+}
 
 .errorBorder{
     border: 1px solid;
@@ -61,7 +64,7 @@ html body{
     margin: 15px;
     justify-content: space-around;
     flex-direction:row;
-    align-items:center;
+    align-items:flex-start;
 }
 
 .flex-row-evenly{
@@ -76,6 +79,7 @@ html body{
 
 .chat-box{    
     min-height: 50vh;
+    max-height: 50vh;
     border: darkgray solid 1px;
     border-radius: 15px;
     padding: 5px;
@@ -85,10 +89,11 @@ html body{
     flex-direction: column;
 }
 
-.chat-box textarea{
+.chat-box #chat-log{
     border-radius: 15px;
     height: auto;
     flex-grow: 2;
+    overflow: hidden;
 }
 
 .send-messagge-box{

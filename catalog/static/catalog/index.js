@@ -6,7 +6,6 @@ form = document.getElementsByTagName('form')[0];
 
 tagsList.on('change', function(){ 
     tag = tagsList.find('option[value=' + this.value + ']');
-    console.log(this.value)
     valueSelected = this.value
     labelSelected = tag.text()
     

@@ -69,7 +69,6 @@ def chat_rooms(request):
 
 
 def waitingConfirmation(request):
-
     return render(request, 'waitingConfirmation.html')
 
 
@@ -186,16 +185,16 @@ def create_chat_room(request):
 
     return render(request, 'create_chat_room.html', {'form_new_chatroom': form_new_chatroom})
 
-def chat(request, chat_pk):
-    chat = Chatroom.objects.get(pk=chat_pk)
-    try:
-        request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
-        
-        chat.users.add(request.user)
-    except:
-        pass
-
-    return render(request,'chat.html', {"chat": chat})
+#def chat(request, chat_pk):
+#    chat = Chatroom.objects.get(pk=chat_pk)
+#    try:
+#        request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
+#        
+#        chat.users.add(request.user)
+#    except:
+#        pass
+#
+#    return render(request,'chat.html', {"chat": chat})
 
 def validate_max_chatrooms(user):
     x=0

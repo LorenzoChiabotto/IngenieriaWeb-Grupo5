@@ -18,5 +18,5 @@ from django.urls import path,include
 
 urlpatterns = [
     path('', include('catalog.urls')),
-
+    path('chat/', include('chatRoom.urls')),
 ]
