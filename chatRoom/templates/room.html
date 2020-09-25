@@ -4,7 +4,7 @@
 {{ request.user.id|json_script:"user_id" }}
 {{ request.user.user.username|json_script:"user_name" }}
 <link rel="stylesheet" href="{% static 'chatRoom/styles.css' %}">
-<a href="/chat_rooms" class="btn btn-danger btn-lg btn-block w-25 m-2"> Leave </a>
+<a href="{%url 'chatRoom:roomsList' %}" class="btn btn-danger btn-lg btn-block w-25 m-2"> Leave </a>
 
 <div class="container-center message-box">
     <div class="flex-row-around">
@@ -24,7 +24,7 @@
             <ul>
                 {% for user in chat.users.all%}
                 <li>
-                    <a href="/profile/{{user.pk}}">{{user}}</a>
+                    <a href="{%url 'catalog:profile' user.pk %}">{{user}}</a>
                 </li>
                 {%endfor%}
             </ul>
