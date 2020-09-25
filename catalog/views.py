@@ -180,7 +180,7 @@ def create_chat_room(request):
             room.tags.set(Tag.objects.filter(id__in=tags))
             room.users.set([request.user])
             room.save()
-            return redirect('chat',chat_pk=room.pk)
+            return redirect('chatRoom:room',room_pk=room.pk)
 
 
     return render(request, 'create_chat_room.html', {'form_new_chatroom': form_new_chatroom})
