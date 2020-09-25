@@ -10,14 +10,19 @@
     <div class="flex-row-around">
         <div class="chat-box">
             <div id="chat-log" class="w-100 h-50 pb-2 pt-2 overflow-auto" style="max-height: 50%"></div>
-            <div class="send-messagge-box">
-                <input id="chat-message-input" type="text">
-                <input id="chat-message-submit" type="button" value=">>">
-            </div>
-            <div class="attachments mt-2 mb-2">
-                <input id="attachButton" type="button" value="attach">
-                <label id="attachDescription"></label>
-            </div>
+            <form action="POST">
+                {% csrf_token %}
+                <div class="send-messagge-box w-100 container-center-no-m">
+                    <div class="w-100 flex-row-around">
+                        <input id="chat-message-input" type="text">
+                        <input id="chat-message-submit" type="submit" value=">>">
+                    </div>
+                    <div class="attachments mt-2 mb-2 w-100">
+                        <input type="file" name="image" accept="image/*" id="image">
+                        <input type="file" name="file" id="file">
+                    </div>
+                </div>
+            </form>
         </div>
         <div class="users-box">
             <h5>Users</h5>

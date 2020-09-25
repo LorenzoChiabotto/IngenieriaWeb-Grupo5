@@ -2,6 +2,7 @@
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+from .forms import FormMessage
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
@@ -25,6 +26,7 @@ class ChatConsumer(WebsocketConsumer):
 
     # Receive message from WebSocket
     def receive(self, text_data):
+
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         aType = text_data_json['type']

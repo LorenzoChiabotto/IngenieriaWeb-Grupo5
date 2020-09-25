@@ -1,13 +1,13 @@
 
 var req = new XMLHttpRequest(); 
 req.open('GET', '/chat/render_message', false); 
-req.send({'chat':1});
+req.send({});
 const message = req.response
 
 
 req = new XMLHttpRequest(); 
 req.open('GET', '/chat/render_user_message', false); 
-req.send({'chat':1});
+req.send({});
 const user_message = req.response
 
 
@@ -66,6 +66,15 @@ document.querySelector('#chat-message-input').onkeyup = function (e) {
 };
 
 document.querySelector('#chat-message-submit').onclick = function (e) {
+    e.preventDefault()
+    var req = new XMLHttpRequest(); 
+    req.open('POST', '/chat/send_message', true); 
+    formData = new FormData(document.querySelector('form'));
+    formData.append("user",document.getElementById('user_id').textContent);
+    req.send(formData);
+    const message2 = req.response;
+    console.log(message2);
+
     const messageInputDom = document.querySelector('#chat-message-input');
     const message = messageInputDom.value;
     if (message === ""){
@@ -76,8 +85,21 @@ document.querySelector('#chat-message-submit').onclick = function (e) {
         'message': message,
         'userId':document.getElementById('user_id').textContent,
         'userName':document.getElementById('user_name').textContent,
-        'image':'',
-        'file':'',
+        'image': document.querySelector('#image').value,
+        'file': document.querySelector('#file').value,
     }));
     messageInputDom.value = '';
 };
+//document.querySelector('#chat-message-submit').onclick = function (e) {
+//    )
+//    req.open('GET', '/chat/send_message', false); 
+//    req.send({
+//        'type': 'chat_message',
+//        'message': document.querySelector('#chat-message-input').value,
+//        'userId':document.getElementById('user_id').textContent,
+//        'userName':document.getElementById('user_name').textContent,
+//        'image':document.querySelector('#id_image').value,
+//        'file':document.querySelector('#id_file').value,
+//    });
+//    console.log('__________')
+//}

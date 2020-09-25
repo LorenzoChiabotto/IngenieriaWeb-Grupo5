@@ -1,6 +1,7 @@
 from django.db import models
 from catalog.models import User_validable, User, Tag
 from django.utils import timezone
+from django.utils.timezone import now
 
 class Kicked_out_user(models.Model):
     user = models.OneToOneField(User_validable, on_delete=models.NOT_PROVIDED)
@@ -11,10 +12,10 @@ class Kicked_out_user(models.Model):
 
 class Message(models.Model):
     user = models.OneToOneField(User_validable, on_delete=models.NOT_PROVIDED)
-    message = models.CharField(max_length=255)
+    message = models.CharField(max_length=255, blank=True)
     image = models.ImageField(upload_to="messages_images", blank=True)
     file = models.FileField(upload_to="messages_files", blank=True)
-    time = models.TimeField()
+    time = models.TimeField(default=now)
 
 
 class Chatroom(models.Model):

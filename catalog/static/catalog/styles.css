@@ -12,6 +12,13 @@ html body{
     align-items:center;
     align-content:space-around;
 }
+.container-center-no-m{
+    display: flex;
+    width: 100%;
+    flex-direction:column;
+    align-items:center;
+}
+
 .signup-login{
     width: 50%;
     height: 100%;

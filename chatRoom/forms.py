@@ -31,4 +31,4 @@ class New_Chatroom(ModelForm):
 class FormMessage(ModelForm):
     class Meta:
         model = Message
-        fields = ["message","image","file"]
+        fields = ["message","image","file", "user"]

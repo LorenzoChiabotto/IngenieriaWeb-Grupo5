@@ -24,7 +24,6 @@ def chat_rooms(request):
     rooms = list(filter(lambda chatroom: not chatroom.duration or (chatroom.created_at.__add__(timedelta(hours=chatroom.duration)) > timezone.now())  , Chatroom.objects.all()))
     contexto = {'rooms': rooms}
     return render(request,'chat_rooms.html',contexto)
-
     
 @login_required(login_url='/login/')
 def create_chat_room(request):
@@ -61,16 +60,30 @@ def create_chat_room(request):
 
     return render(request, 'create_chat_room.html', {'form_new_chatroom': form_new_chatroom})
 
-#def chat(request, chat_pk):
-#    chat = Chatroom.objects.get(pk=chat_pk)
-#    try:
-#        request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
-#        
-#        chat.users.add(request.user)
-#    except:
-#        pass
-#
-#    return render(request,'chat.html', {"chat": chat})
+
+def room(request, room_pk):
+    chat = Chatroom.objects.get(pk=room_pk)
+    form_send_message = FormMessage()
+    if chat is not None:
+        try:
+            request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
+            
+            chat.users.add(request.user)
+        except:
+            pass
+
+        return render(request,'room.html', {"chat": chat, 'form_send_message':form_send_message})
+    else:
+        return render(None, '')
+        
+
+def render_message(request):
+    return render(request,'chatMessage.html', )
+    
+
+def render_user_message(request):
+    return render(request,'chatUserMessage.html', )
+
 
 def validate_max_chatrooms(user):
     x=0
@@ -82,28 +95,14 @@ def validate_max_chatrooms(user):
             return False
     return True
 
-
-
-
-
-def room(request, room_pk):
-    chat = Chatroom.objects.get(pk=room_pk)
-    if chat is not None:
-        try:
-            request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
-            
-            chat.users.add(request.user)
-        except:
-            pass
-
-        return render(request,'room.html', {"chat": chat})
-    else:
-        return render(None, '')
-        
-
-def render_message(request):
-    return render(request,'chatMessage.html', )
-    
-
-def render_user_message(request):
-    return render(request,'chatUserMessage.html', )
+def send_message(request):
+    if(request.method == 'POST'):
+        print('___________________________')
+        print(request.POST)
+        print('___________________________')
+        print(request.FILES)
+        print('___________________________')
+        form_message = FormMessage(request.POST, request.FILES)
+        if form_message.is_valid():
+            form_message.save()
+        return HttpResponse(form_message)
