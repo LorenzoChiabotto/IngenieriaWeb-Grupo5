@@ -1,6 +1,6 @@
 
 var req = new XMLHttpRequest(); 
-req.open('GET', 'chat/render_message', false); 
+req.open('GET', '/chat/render_message', false); 
 req.send({'chat':1});
 const message = req.response
 
