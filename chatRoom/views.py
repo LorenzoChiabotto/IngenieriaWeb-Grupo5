@@ -89,10 +89,11 @@ def validate_max_chatrooms(user):
     x=0
     user_chatrooms = Chatroom.objects.filter(administrator=user)
     for chatroom in user_chatrooms:
-        if chatroom.created_at < timezone.now().__add__(timedelta(hours=chatroom.duration)):
-            x+=1
-        if(x >= 3):
-            return False
+        if(if chatroom.created_at is not None):
+            if chatroom.created_at < timezone.now().__add__(timedelta(hours=chatroom.duration)):
+                x+=1
+            if(x >= 3):
+                return False
     return True
 
 def send_message(request):
