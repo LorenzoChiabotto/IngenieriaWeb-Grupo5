@@ -10,10 +10,6 @@ req.open('GET', '/chat/render_user_message', false);
 req.send({});
 const user_message = req.response
 
-
-
-const queryString = window.location.search;
-
 const roomPk = document.getElementById('room_id').textContent;
 
 const chatSocket = new WebSocket(
@@ -38,13 +34,26 @@ chatSocket.onmessage = function (e) {
             }
             x.innerHTML = x.innerHTML.replace('__user__', data.userName)
             x.innerHTML = x.innerHTML.replace('__messagge__', data.message)
-            document.querySelector('#chat-log').appendChild(x)
+            if(data.file){
+                x.querySelector("#fileLinkMessage").setAttribute("href", data.file)               
+            }else{
+                x.removeChild(x.querySelector("#fileLinkMessage"))                
+            }
+            if(data.image){
+                x.querySelector("#imageMessage").setAttribute("src", data.image)         
+            }else{
+                x.removeChild(x.querySelector("#imageMessage"))                
+            }
+
+            document.getElementById('chat-log').appendChild(x)
             break;
         case "chat_kick":
             if(document.getElementById('user_id').textContent == data.userId){
                     alert("You have been kicked out: "+ data.message)
                     window.location.replace("/");
             }
+        case "user_leave":
+            
         default:
             break;
     }
@@ -65,28 +74,37 @@ document.querySelector('#chat-message-input').onkeyup = function (e) {
 
 document.querySelector('#chat-message-submit').onclick = function (e) {
     e.preventDefault()
-    var req = new XMLHttpRequest(); 
-    req.open('POST', '/chat/send_message', true); 
-    formData = new FormData(document.querySelector('form'));
-    formData.append("user",document.getElementById('user_id').textContent);
-    formData.append("room", roomPk);
-    req.send(formData);
-    const message2 = req.response;
 
     const messageInputDom = document.querySelector('#chat-message-input');
     const message = messageInputDom.value;
     if (message === ""){
         return
     }
-    chatSocket.send(JSON.stringify({
-        'type': 'chat_message',
-        'message': message,
-        'userId':document.getElementById('user_id').textContent,
-        'userName':document.getElementById('user_name').textContent,
-        'image': document.querySelector('#image').value,
-        'file': document.querySelector('#file').value,
-    }));
-    messageInputDom.value = '';
+
+    var req = new XMLHttpRequest(); 
+    req.open('POST', '/chat/send_message', true); 
+    req.overrideMimeType("application/json");
+    formData = new FormData(document.querySelector('form'));
+    formData.append("user",document.getElementById('user_id').textContent);
+    formData.append("chatroom", roomPk);
+    formData.append("message", message);
+    req.onload  = function() {
+        var jsonResponse = JSON.parse(req.responseText);
+
+        console.log(jsonResponse)
+        
+        chatSocket.send(JSON.stringify({
+            'type': jsonResponse.type,
+            'message': jsonResponse.message,
+            'userId':jsonResponse.userId,
+            'userName': jsonResponse.userName,
+            'image':jsonResponse.image,
+            'file': jsonResponse.file,
+        }));
+        messageInputDom.value = '';
+
+    }
+    req.send(formData);
 };
 //document.querySelector('#chat-message-submit').onclick = function (e) {
 //    )

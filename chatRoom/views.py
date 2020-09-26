@@ -5,15 +5,14 @@ from django.template import Context, Template
 from django.template.loader import render_to_string
 
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
-
-
+from django.http import HttpResponse, JsonResponse
 
 from datetime import timedelta
 from django.utils import timezone
 from catalog.models import User_validable
 from .models import Chatroom, Kicked_out_user,Message,Tag
 from .forms import FormMessage, New_Chatroom
+from django.conf import settings
 
 
 def chat_rooms(request):
@@ -55,7 +54,7 @@ def create_chat_room(request):
             room.tags.set(Tag.objects.filter(id__in=tags))
             room.users.set([request.user])
             room.save()
-            return redirect('chatRoom:roomsList',room_pk=room.pk)
+            return redirect('chatRoom:room',room_pk=room.pk)
 
 
     return render(request, 'create_chat_room.html', {'form_new_chatroom': form_new_chatroom})
@@ -101,9 +100,14 @@ def send_message(request):
         form_message = FormMessage(request.POST, request.FILES)
         if form_message.is_valid():
             message = form_message.save()
-            
-            chat = Chatroom.objects.get(pk=request.POST.get('room'))
-            chat.messages.add(message)
-            return HttpResponse(form_message)
+            return JsonResponse(
+                {
+                    'type': 'chat_message',
+                    'message': message.message,
+                    'userId': message.user.user.pk,
+                    'userName': message.user.user.username,
+                    'image': settings.MEDIA_URL+str(message.image),
+                    'file': settings.MEDIA_URL+str(message.file)
+                })
         else:
-            return HttpResponse(form_message)
+            return JsonResponse(form_message)

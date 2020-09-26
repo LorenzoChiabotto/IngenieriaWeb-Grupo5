@@ -59,10 +59,10 @@ ROOT_URLCONF = 'webChat.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'catalog/templates'), ],
+        'DIRS': [os.path.join(BASE_DIR, 'catalog/templates'), os.path.join(BASE_DIR, 'chatRoom/templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
-            'context_processors': [
+            'context_processors': [ 
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',

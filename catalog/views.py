@@ -79,9 +79,6 @@ def signup(request):
             user_validable.token = token
             user_validable.save()
 
-            #user.is_active = False
-            #user.save()
-
             current_site = get_current_site(request)
             mail_subject = 'Activación Cuenta'
             message = render_to_string('active_email.html', {
