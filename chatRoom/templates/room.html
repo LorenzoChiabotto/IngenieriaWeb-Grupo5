@@ -3,6 +3,7 @@
 {% block content %}
 {{ request.user.id|json_script:"user_id" }}
 {{ request.user.user.username|json_script:"user_name" }}
+{{ chat.pk|json_script:"room_id" }}
 <link rel="stylesheet" href="{% static 'chatRoom/styles.css' %}">
 <a href="{%url 'chatRoom:roomsList' %}" class="btn btn-danger btn-lg btn-block w-25 m-2"> Leave </a>
 

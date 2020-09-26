@@ -62,6 +62,7 @@ def create_chat_room(request):
 
 
 def room(request, room_pk):
+    print(room_pk)
     chat = Chatroom.objects.get(pk=room_pk)
     form_send_message = FormMessage()
     if chat is not None:
@@ -72,7 +73,7 @@ def room(request, room_pk):
         except:
             pass
 
-        return render(request,'room.html', {"chat": chat, 'form_send_message':form_send_message})
+        return render(request,'room.html', {"chat": chat, 'form_send_message':form_send_message, 'room':room_pk})
     else:
         return render(None, '')
         
@@ -97,12 +98,12 @@ def validate_max_chatrooms(user):
 
 def send_message(request):
     if(request.method == 'POST'):
-        print('___________________________')
-        print(request.POST)
-        print('___________________________')
-        print(request.FILES)
-        print('___________________________')
         form_message = FormMessage(request.POST, request.FILES)
         if form_message.is_valid():
-            form_message.save()
-        return HttpResponse(form_message)
+            message = form_message.save()
+            
+            chat = Chatroom.objects.get(pk=request.POST.get('room'))
+            chat.messages.add(message)
+            return HttpResponse(form_message)
+        else:
+            return HttpResponse(form_message)

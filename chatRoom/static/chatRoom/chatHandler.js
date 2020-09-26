@@ -14,15 +14,13 @@ const user_message = req.response
 
 const queryString = window.location.search;
 
-const urlParams = new URLSearchParams(queryString);
-
-const roomName = JSON.parse(urlParams.get("room_pk"));
+const roomPk = document.getElementById('room_id').textContent;
 
 const chatSocket = new WebSocket(
     'ws://'
     + window.location.host
     + '/ws/chat/'
-    + roomName
+    + roomPk
     + '/'
 );
 
@@ -71,9 +69,9 @@ document.querySelector('#chat-message-submit').onclick = function (e) {
     req.open('POST', '/chat/send_message', true); 
     formData = new FormData(document.querySelector('form'));
     formData.append("user",document.getElementById('user_id').textContent);
+    formData.append("room", roomPk);
     req.send(formData);
     const message2 = req.response;
-    console.log(message2);
 
     const messageInputDom = document.querySelector('#chat-message-input');
     const message = messageInputDom.value;
