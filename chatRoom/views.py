@@ -14,6 +14,8 @@ from .models import Chatroom, Kicked_out_user,Message,Tag
 from .forms import FormMessage, New_Chatroom
 from django.conf import settings
 
+import json
+
 
 def chat_rooms(request):
     try:
@@ -112,3 +114,27 @@ def send_message(request):
                 })
         else:
             return JsonResponse(form_message)
+
+
+
+def get_messages(request, room_pk, last_time):
+    if(request.method == 'GET'):
+        if(last_time != "0"):
+            messages = Message.objects.filter(chatroom=room_pk, time__gt=last_time)
+        else:
+            messages = Message.objects.filter(chatroom=room_pk)
+
+        returnMessages = []
+        for message in messages:
+            returnMessages.append(
+                {
+                    'type': 'chat_message',
+                    'message': message.message,
+                    'userId': message.user.user.pk,
+                    'userName': message.user.user.username,
+                    'image': settings.MEDIA_URL+str(message.image),
+                    'file': settings.MEDIA_URL+str(message.file),
+                    'last_time': str(message.time)
+                }
+            )
+        return HttpResponse(json.dumps(returnMessages), content_type="application/json")

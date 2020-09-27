@@ -31,7 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -137,23 +136,6 @@ EMAIL_HOST_PASSWORD = "Esternocleidomastoeideo2"
 #RECAPTCHA_PUBLIC_KEY = ''
 #RECAPTCHA_PRIVATE_KEY = ''
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
-
-
-ASGI_APPLICATION = 'webChat.routing.application'
-
-# CHANNEL_LAYERS = {
-# 'default': {
-#     'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#     'CONFIG': {
-#         "hosts": [('127.0.0.1', 6379)],
-#     },
-# },
-# }
-CHANNEL_LAYERS = {
-    'default': {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    },
-}
 
 
 django_heroku.settings(locals())

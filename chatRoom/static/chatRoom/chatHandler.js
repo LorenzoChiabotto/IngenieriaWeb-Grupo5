@@ -11,59 +11,62 @@ req.send({});
 const user_message = req.response
 
 const roomPk = document.getElementById('room_id').textContent;
+let last_time = "0";
 
-const chatSocket = new WebSocket(
-    'ws://'
-    + window.location.host
-    + '/ws/chat/'
-    + roomPk
-    + '/'
-);
-
-chatSocket.onmessage = function (e) {
-    const data = JSON.parse(e.data);
-    switch (data.type) {
-        case "chat_message":
-            var x = document.createElement('div')
-            if(document.getElementById('user_id').textContent == data.userId){
-                x.style.display= 'flex'
-                x.style.justifyContent = 'flex-end'
-                x.innerHTML = user_message
-            }else{
-                x.innerHTML = message
-            }
-            x.innerHTML = x.innerHTML.replace('__user__', data.userName)
-            x.innerHTML = x.innerHTML.replace('__messagge__', data.message)
-            if(data.file){
-                x.querySelector("#fileLinkMessage").setAttribute("href", data.file)               
-            }else{
-                x.removeChild(x.querySelector("#fileLinkMessage"))                
-            }
-            if(data.image){
-                x.querySelector("#imageMessage").setAttribute("src", data.image)         
-            }else{
-                x.removeChild(x.querySelector("#imageMessage"))                
-            }
-
-            document.getElementById('chat-log').appendChild(x)
-            break;
-        case "chat_kick":
-            if(document.getElementById('user_id').textContent == data.userId){
-                    alert("You have been kicked out: "+ data.message)
-                    window.location.replace("/");
-            }
-        case "user_leave":
+setInterval(function() {
+    var req = new XMLHttpRequest(); 
+    console.log(last_time)
+    req.open('GET', '/chat/get_messages/'+roomPk+"/"+ last_time, true);
+    req.overrideMimeType("application/json");
+    console.log(req)
+    req.onload  = function() {
+        var jsonResponse = JSON.parse(req.responseText);
+        
+        console.log(jsonResponse)
             
-        default:
-            break;
-    }
+        for (let index = 0; index < jsonResponse.length; index++) {
+            const data = jsonResponse[index];
+            last_time = data.last_time;
+            switch (data.type) {
+                case "chat_message":
+                    var x = document.createElement('div')
+                    if(document.getElementById('user_id').textContent == data.userId){
+                        x.style.display= 'flex'
+                        x.style.justifyContent = 'flex-end'
+                        x.innerHTML = user_message
+                    }else{
+                        x.innerHTML = message
+                    }
+                    x.innerHTML = x.innerHTML.replace('__user__', data.userName)
+                    x.innerHTML = x.innerHTML.replace('__messagge__', data.message)
+                    if(data.file){
+                        x.querySelector("#fileLinkMessage").setAttribute("href", data.file)               
+                    }else{
+                        x.removeChild(x.querySelector("#fileLinkMessage"))                
+                    }
+                    if(data.image){
+                        x.querySelector("#imageMessage").setAttribute("src", data.image)         
+                    }else{
+                        x.removeChild(x.querySelector("#imageMessage"))                
+                    }
     
+                    document.getElementById('chat-log').appendChild(x)
+                    break;
+                case "chat_kick":
+                    if(document.getElementById('user_id').textContent == data.userId){
+                            alert("You have been kicked out: "+ data.message)
+                            window.location.replace("/");
+                    }
+                case "user_leave":
+                    
+                default:
+                    break;
+            }
+        }
+    }
+    req.send();
 
-};
-
-chatSocket.onclose = function (e) {
-    console.error('Chat socket closed unexpectedly');
-};
+}, 1000);
 
 document.querySelector('#chat-message-input').focus();
 document.querySelector('#chat-message-input').onkeyup = function (e) {
@@ -93,14 +96,7 @@ document.querySelector('#chat-message-submit').onclick = function (e) {
 
         console.log(jsonResponse)
         
-        chatSocket.send(JSON.stringify({
-            'type': jsonResponse.type,
-            'message': jsonResponse.message,
-            'userId':jsonResponse.userId,
-            'userName': jsonResponse.userName,
-            'image':jsonResponse.image,
-            'file': jsonResponse.file,
-        }));
+        
         messageInputDom.value = '';
 
     }
