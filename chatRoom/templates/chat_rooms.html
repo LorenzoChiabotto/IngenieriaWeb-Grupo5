@@ -54,13 +54,11 @@
             <div class="card" style="width: 19rem;">
                 <div class="card-body">
                     <h3 class="card-title">My Chatrooms!</h3>
-                    {% if rooms.users.name == user.name %}
                     {% for room in rooms %}
+                        {% if room.users.pk == user.is_authenticated %}
                             <a href="{% url 'chatRoom:room' room.pk %}" class="btn btn-light btn-sm w-100 primaryHighligthBorderColor">{{room.name}}</a>
+                        {% endif %}
                     {% endfor %}
-                    {% else %}
-                        <h3 class="badge badge-pill badge-primary p-1 mt-2">No hay salas</h3>
-                    {% endif %}
                 </div>
             </div>
     </div>
