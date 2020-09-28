@@ -4,6 +4,8 @@
 {{ request.user.id|json_script:"user_id" }}
 {{ request.user.user.username|json_script:"user_name" }}
 {{ chat.pk|json_script:"room_id" }}
+{{ chat.time_between_messages|json_script:"time_between_messages" }}
+{{ chat.messages_per_minute|json_script:"messages_per_minute" }}
 <link rel="stylesheet" href="{% static 'chatRoom/styles.css' %}">
 <a href="{%url 'chatRoom:roomsList' %}" class="btn btn-danger btn-lg btn-block w-25 m-2"> Leave </a>
 
@@ -27,10 +29,10 @@
         </div>
         <div class="users-box">
             <h5>Users</h5>
-            <ul>
+            <ul id="usersList">
                 {% for user in chat.users.all%}
                 <li>
-                    <a href="{%url 'catalog:profile' user.pk %}">{{user}}</a>
+                    <a class="btn btn-light btn-sm" href="/profile/{{user.pk}}">Profile {{user}}</a>
                 </li>
                 {%endfor%}
             </ul>

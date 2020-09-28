@@ -12,6 +12,8 @@ urlpatterns = [
     path('rooms/list',views.chat_rooms, name='roomsList'),
     path('rooms/create', views.create_chat_room, name='roomsCreate'),
     path('rooms/<str:room_pk>', views.room,  name='room'),
+    
+    path('rooms/kickUser/<room_pk>/<user_pk>/<user_kick>', views.kickUser,  name='kickUser'),
 
 ]
 

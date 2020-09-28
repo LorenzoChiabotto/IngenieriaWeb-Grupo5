@@ -60,9 +60,9 @@ def create_chat_room(request):
                 messages_per_minute = messages_per_minute,
                 time_between_messages = time_between_messages,
                 max_users=max_users,
-                duration=duration)
+                duration=duration,
+                administrator=User_validable.objects.get(user=(request.user.user)))
 
-            room.administrator.set(User_validable.objects.filter(user=(request.user.user)))
             room.save()
             room.tags.set(Tag.objects.filter(id__in=tags))
             room.users.set([request.user])
@@ -74,7 +74,6 @@ def create_chat_room(request):
 
 
 def room(request, room_pk):
-    print(room_pk)
     chat = Chatroom.objects.get(pk=room_pk)
     form_send_message = FormMessage()
     if chat is not None:
@@ -102,8 +101,8 @@ def validate_max_chatrooms(user):
     x=0
     user_chatrooms = Chatroom.objects.filter(administrator=user)
     for chatroom in user_chatrooms:
-        if(chatroom.created_at is not None):
-            if chatroom.created_at < timezone.now().__add__(timedelta(hours=chatroom.duration)):
+        if(chatroom.duration is not None):
+            if timezone.now() < chatroom.created_at.__add__(timedelta(hours=chatroom.duration)):
                 x+=1
             if(x >= 3):
                 return False
@@ -111,13 +110,37 @@ def validate_max_chatrooms(user):
 
 def send_message(request):
     if(request.method == 'POST'):
+        strType = 'chat_message'
+        strMessage = request.POST.get("message")
+        strUserPk = request.POST.get("user")
+
+        if(str(strMessage).startswith("/kick ")):
+            splitted = str(strMessage).split(" ")
+            if(len(splitted) == 2):
+                strUserPk = kickUser(request.POST.get("chatroom"), request.POST.get("user"), splitted[1])
+                if(strUserPk is None):
+                    return JsonResponse({})
+                strType = 'kick_message'
+                strMessage = splitted[1] + " has been kicked out"
+        if(str(strMessage).startswith("/ban ")):
+            splitted = str(strMessage).split(" ")
+            if(splitted.count != 3):
+                if(not kickUser(request.POST.get("chatroom"), request.POST.get("user"), splitted[1]), splitted[2]):
+                    return JsonResponse({})
+                strType = 'ban_message'
+                strMessage = splitted[1] + " has been banned - " + splitted[2]
+                
         form_message = FormMessage(request.POST, request.FILES)
         if form_message.is_valid():
             message = form_message.save()
+            message.message = strMessage
+            message.type = strType
+            message.user = strUserPk
+            message.save()
             return JsonResponse(
                 {
-                    'type': 'chat_message',
-                    'message': message.message,
+                    'type': strType,
+                    'message': strMessage,
                     'userId': message.user.user.pk,
                     'userName': message.user.user.username,
                     'image': settings.MEDIA_URL+str(message.image),
@@ -139,7 +162,7 @@ def get_messages(request, room_pk, last_time):
         for message in messages:
             returnMessages.append(
                 {
-                    'type': 'chat_message',
+                    'type': message.type,
                     'message': message.message,
                     'userId': message.user.user.pk,
                     'userName': message.user.user.username,
@@ -149,3 +172,28 @@ def get_messages(request, room_pk, last_time):
                 }
             )
         return HttpResponse(json.dumps(returnMessages), content_type="application/json")
+
+
+def kickUser(room_pk, user_pk,user_kick):
+    try:
+        user_off = User_validable.objects.get(user=User.objects.get(username=user_kick))
+        user_admin = User_validable.objects.get(pk=user_pk)
+        chat = Chatroom.objects.get(pk=room_pk)
+        if ((user_admin == chat.administrator)| (user_admin == chat.moderators)):
+            chat.users.remove(user_off)
+            chat.kicked_out_user.add(Kicked_out_user.objects.create(user = user_off, time=timezone.now()))
+        else:
+            return None
+        return user_off
+    except:
+        return None
+    
+
+
+"""
+user = models.ForeignKey(User_validable, on_delete=models.CASCADE)
+    message = models.CharField(max_length=255, blank=True)
+    image = models.ImageField(upload_to="messages_images", blank=True)
+    file = models.FileField(upload_to="messages_files", blank=True)
+    time = models.TimeField(default=now)
+    chatroom = models.ForeignKey(Chatroom, on_delete=models.CASCADE)"""
