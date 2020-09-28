@@ -24,14 +24,13 @@ def chat_rooms(request):
     except:
         pass
     
-    rooms = list(filter(lambda chatroom: not chatroom.duration or (chatroom.created_at.__add__(timedelta(hours=chatroom.duration)) > timezone.now())  , Chatroom.objects.all()))
     queryset = request.GET.get("buscar")
     print(queryset)
     if queryset is not None:
-        rooms = Chatroom.objects.filter(
+        rooms =  list(filter(lambda chatroom: not chatroom.duration or (chatroom.created_at.__add__(timedelta(hours=chatroom.duration)) > timezone.now())  , Chatroom.objects.filter(
             Q(name__icontains = queryset) |
             Q(description__icontains = queryset)
-        ).distinct()
+        )))
     else:
         rooms = list(filter(lambda chatroom: not chatroom.duration or (chatroom.created_at.__add__(timedelta(hours=chatroom.duration)) > timezone.now())  , Chatroom.objects.all()))
 
