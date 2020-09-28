@@ -16,13 +16,25 @@ from django.conf import settings
 
 import json
 
+from django.db.models import Q
 
 def chat_rooms(request):
     try:
         request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
     except:
         pass
+    
     rooms = list(filter(lambda chatroom: not chatroom.duration or (chatroom.created_at.__add__(timedelta(hours=chatroom.duration)) > timezone.now())  , Chatroom.objects.all()))
+    queryset = request.GET.get("buscar")
+    print(queryset)
+    if queryset is not None:
+        rooms = Chatroom.objects.filter(
+            Q(name__icontains = queryset) |
+            Q(description__icontains = queryset)
+        ).distinct()
+    else:
+        rooms = list(filter(lambda chatroom: not chatroom.duration or (chatroom.created_at.__add__(timedelta(hours=chatroom.duration)) > timezone.now())  , Chatroom.objects.all()))
+
     contexto = {'rooms': rooms}
     return render(request,'chat_rooms.html',contexto)
     

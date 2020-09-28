@@ -1,6 +1,24 @@
 {%extends "base.html" %}
 {% block content %}
 
+    <div class="container m-5">
+        <div class="row">
+            <div class="col-md-12 search"> 
+                <form method="get">
+                    <div id="custom-search-input">
+                        <div class="input-group col-md-12">
+                            <input type="text" class="form-control" placeholder="Search.." name="buscar" value = "{{request.GET.buscar }}">
+                            <span class="input-group-list">
+                                <i class="icon icon-search"></i>
+                                <button type="submit" class="btn btn-success">Search</button>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="container-center">
         <div class="flex-row-around">
             <h3 class="display-3">Chatrooms!</h3> <a href="create" class="m-3 btn btn-success h-50">Create your chatroom!</a>
