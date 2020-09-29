@@ -16,7 +16,10 @@
             <form action="POST">
                 {% csrf_token %}
                 <div class="send-messagge-box w-100 container-center-no-m">
-                    <div class="w-100 flex-row-around">
+                    {% if chat.administrator.pk == user.pk %}
+                        <p class="font-italic m-1 mt-3"> say: [/kick "username"] to kick a user </p>
+                    {% endif %}
+                    <div class="w-100 flex-row-around mt-0">
                         <input id="chat-message-input" type="text">
                         <input id="chat-message-submit" type="submit" value=">>">
                     </div>
