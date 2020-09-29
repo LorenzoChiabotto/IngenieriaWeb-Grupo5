@@ -1,67 +1,100 @@
 {%extends "base.html" %}
 {% block content %}
 
+<form method="get">
     <div class="container m-5">
         <div class="row">
-            <div class="col-md-12 search"> 
-                <form method="get">
-                    <div id="custom-search-input">
-                        <div class="input-group col-md-12">
-                            <input type="text" class="form-control" placeholder="Search.." name="buscar" value = "{{request.GET.buscar }}">
-                            <span class="input-group-list">
-                                <i class="icon icon-search"></i>
-                                <button type="submit" class="btn btn-success">Search</button>
-                            </span>
-                        </div>
+            <div class="col-md-12 search">
+                <div id="custom-search-input">
+                    <div class="input-group col-md-12">
+                        <input type="text" class="form-control" placeholder="Search.." name="search"
+                            value="{{request.GET.search}}">
+                        <span class="input-group-list">
+                            <button type="submit" class="btn btn-success">Search</button>
+                        </span>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
-    <div style="display:flex; flex-direction:row;justify-content: space-evenly;">
-        <div class="container-center">
-            <div class="flex-row-around">
-                <h3 class="display-3">Chatrooms!</h3> <a href="create" class="m-3 btn btn-success h-50">Create your chatroom!</a>
-            </div>
-            <div class="flex-row-evenly">
-                {% if rooms %}
-                {% for room in rooms %}
 
-                <div class="card m-3" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{room.name}}</h5>
-                        <p class="card-text">{{room.description}}</p>
-                        <a href="{% url 'chatRoom:room' room.pk %}" class="btn btn-primary primaryHighligthColor primaryHighligthBorderColor w-100">Enter to chat!</a>
-
-                        <div class="flex-row-evenly">
-                            {% for tag in room.tags.all %}
-                            <div class="badge badge-pill badge-primary p-1 mt-2">
-                                <a href="#" class="text-decoration-none text-white m-1">{{tag.name}} </a>
-                            </div>
+    <div class="container m-5">
+        <div class="row">
+            <div class="col-md-12 search">
+                <div id="custom-search-input">
+                    <div class="input-group" style="display:flex; flex-direction:row;justify-content: flex-start;">
+                        <div id="tagsContainer">
+                            {% for tag in tags %}
+                                {% if tag.pk|stringformat:"s" == tagsSelected|stringformat:"s" %}
+                                    <div class="badge badge-pill badge-secondary p-0 m-1">
+                                        <button
+                                            class="h-100 w-wrap rounded-right rounded-lg btn-sm btn border border-secondary text-decoration-none text-white m-1 bg-secondary"
+                                            style="min-width: 60px;" name="tags" value=""><span>{{tag.name}}</span>
+                                        </button>
+                                    </div>
+                                {% else %}
+                                    <div class="badge badge-pill badge-primary p-0 m-1">
+                                        <button
+                                            class="h-100 w-wrap rounded-right rounded-lg btn-sm btn border border-primary text-decoration-none text-white m-1"
+                                            style="min-width: 60px;" name="tags" value="{{tag.pk}}"><span>{{tag.name}}</span>
+                                        </button>
+                                    </div>
+                                {% endif %}
                             {% endfor %}
                         </div>
                     </div>
                 </div>
-
-                {% endfor %}
-
-                {% else %}
-                <h3 class="display-3">No hay salas</h3>
-                {% endif %}
-
             </div>
         </div>
-            <div class="card" style="width: 19rem;">
+    </div>
+
+</form>
+<div style="display:flex; flex-direction:row;justify-content: space-evenly;">
+    <div class="container-center">
+        <div class="flex-row-around">
+            <h3 class="display-3">Chatrooms!</h3> <a href="create" class="m-3 btn btn-success h-50">Create your
+                chatroom!</a>
+        </div>
+        <div class="flex-row-evenly">
+            {% if rooms %}
+            {% for room in rooms %}
+
+            <div class="card m-3" style="width: 18rem;">
                 <div class="card-body">
-                    <h3 class="card-title">My Chatrooms!</h3>
-                    {% for room in rooms %}
-                        {% if room.users.pk == user.is_authenticated %}
-                            <a href="{% url 'chatRoom:room' room.pk %}" class="btn btn-light btn-sm w-100 primaryHighligthBorderColor">{{room.name}}</a>
-                        {% endif %}
-                    {% endfor %}
+                    <h5 class="card-title">{{room.name}}</h5>
+                    <p class="card-text">{{room.description}}</p>
+                    <a href="{% url 'chatRoom:room' room.pk %}"
+                        class="btn btn-primary primaryHighligthColor primaryHighligthBorderColor w-100">Enter to
+                        chat!</a>
+
+                    <div class="flex-row-evenly">
+                        {% for tag in room.tags.all %}
+                        <div class="badge badge-pill badge-primary p-1 mt-2">
+                            <a href="#" class="text-decoration-none text-white m-1">{{tag.name}} </a>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
+
+            {% endfor %}
+
+            {% else %}
+            <h3 class="display-3">No hay salas</h3>
+            {% endif %}
+
+        </div>
     </div>
+    <div class="card" style="width: 19rem;">
+        <div class="card-body">
+            <h3 class="card-title">My Chatrooms!</h3>
+            {% for room in userRooms %}
+            <a href="{% url 'chatRoom:room' room.pk %}"
+                class="btn btn-light btn-sm w-100 primaryHighligthBorderColor">{{room.name}}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 
 
 

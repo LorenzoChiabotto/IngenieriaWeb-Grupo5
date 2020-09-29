@@ -19,22 +19,34 @@ import json
 from django.db.models import Q
 
 def chat_rooms(request):
+    userRooms = None
     try:
         request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
+        userRooms = list(filter(lambda chatroom: not chatroom.duration or (chatroom.created_at.__add__(timedelta(hours=chatroom.duration)) > timezone.now()), Chatroom.objects.filter(users__user__pk__icontains=User_validable.objects.get(user=User.objects.get(username=request.user)).pk)))
     except:
         pass
+    tags = Tag.objects.all()
+    queryset = request.GET.get("search")
+    querysetTags = request.GET.get("tags")
+    print(querysetTags)
     
-    queryset = request.GET.get("buscar")
-    print(queryset)
     if queryset is not None:
-        rooms =  list(filter(lambda chatroom: not chatroom.duration or (chatroom.created_at.__add__(timedelta(hours=chatroom.duration)) > timezone.now())  , Chatroom.objects.filter(
+        rooms =  Chatroom.objects.filter(
             Q(name__icontains = queryset) |
             Q(description__icontains = queryset)
-        )))
+        )
     else:
-        rooms = list(filter(lambda chatroom: not chatroom.duration or (chatroom.created_at.__add__(timedelta(hours=chatroom.duration)) > timezone.now())  , Chatroom.objects.all()))
+        rooms = Chatroom.objects.all()
+    if querysetTags is not None:
+        rooms =  rooms.filter(
+            tags__pk__icontains=querysetTags
+        )
 
-    contexto = {'rooms': rooms}
+    filteredRooms = list(filter(lambda chatroom: not chatroom.duration or (chatroom.created_at.__add__(timedelta(hours=chatroom.duration)) > timezone.now()), rooms))
+    contexto = {'rooms': filteredRooms, 'tags':tags, 'userRooms':userRooms, 'tagsSelected':querysetTags}
+    if(userRooms is not None): 
+        contexto = {'rooms': filteredRooms, 'tags':tags, 'userRooms':userRooms, 'tagsSelected':querysetTags}
+    
     return render(request,'chat_rooms.html',contexto)
     
 @login_required(login_url='/login/')

@@ -11,7 +11,18 @@
             {% csrf_token %}
             {% for field in form_new_chatroom %}
             <div class="form-group">
-                <label>{{ field.label }}</label>
+                {% if field.label != "Duration" %}
+                    {% if field.label != "Time between messages" %}
+                        <label>{{ field.label }}</label>
+                    {%else%}
+                        <label>Seconds between messages</label>
+                    {% endif %}
+                {%else%}
+                    <label>Hours of duration</label>
+                {% endif %}
+                
+                
+
                 {% if field.errors %}
                 <div class="errorBorder">
                     {{ field }}
