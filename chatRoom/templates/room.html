@@ -7,7 +7,7 @@
 {{ chat.time_between_messages|json_script:"time_between_messages" }}
 {{ chat.messages_per_minute|json_script:"messages_per_minute" }}
 <link rel="stylesheet" href="{% static 'chatRoom/styles.css' %}">
-<a href="{%url 'chatRoom:roomsList' %}" class="btn btn-danger btn-lg btn-block w-25 m-2"> Leave </a>
+<a href="{%url 'chatRoom:leave' chat.pk request.user.id%}" class="btn btn-danger btn-lg btn-block w-25 m-2"> Leave </a>
 
 <div class="container-center message-box">
     <div class="flex-row-around">

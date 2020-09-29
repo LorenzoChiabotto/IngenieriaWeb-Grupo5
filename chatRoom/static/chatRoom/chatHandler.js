@@ -22,7 +22,6 @@ document.querySelector('#chat-message-submit').onclick = function (e) {
     const messageFileInput = document.getElementById('file');
     const messageImageInput = document.getElementById('image');
     const message = messageInputDom.value;
-    console.log(document.getElementById('image').value)
     if (message === "" && messageImageInput.value == null && messageFileInput.value  == null){
         return
     }
@@ -59,7 +58,6 @@ setInterval(function() {
         }
         for (let index = 0; index < jsonResponse.length; index++) {
             const data = jsonResponse[index];
-            console.log(data)
             last_time = data.last_time;
             switch (data.type) {
                 case "chat_message":
@@ -94,7 +92,6 @@ setInterval(function() {
                     document.getElementById('chat-log').appendChild(x)
                     break;
                 case "kick_message":
-                    console.log(data)
                     if(document.getElementById('user_id').textContent == data.userId){
                             if(kickeableCount >= jsonResponse.length){
                                 alert(data.message);

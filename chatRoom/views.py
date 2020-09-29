@@ -28,7 +28,6 @@ def chat_rooms(request):
     tags = Tag.objects.all()
     queryset = request.GET.get("search")
     querysetTags = request.GET.get("tags")
-    print(querysetTags)
     
     if queryset is not None:
         rooms =  Chatroom.objects.filter(
@@ -37,7 +36,7 @@ def chat_rooms(request):
         )
     else:
         rooms = Chatroom.objects.all()
-    if querysetTags is not None:
+    if querysetTags is not None and querysetTags != '':
         rooms =  rooms.filter(
             tags__pk__icontains=querysetTags
         )
@@ -184,6 +183,16 @@ def get_messages(request, room_pk, last_time):
                 }
             )
         return HttpResponse(json.dumps(returnMessages), content_type="application/json")
+
+
+def leave(request, room_pk, user_pk):
+    try:
+        user_off = User_validable.objects.get(pk=user_pk)
+        chat = Chatroom.objects.get(pk=room_pk)
+        chat.users.remove(user_off)
+    except:
+        pass
+    return redirect('chatRoom:roomsList')
 
 
 def kickUser(room_pk, user_pk,user_kick):
