@@ -100,6 +100,15 @@ def room(request, room_pk):
         return render(None, '')
         
 
+def reportRoom(request, room_pk,user_pk ):
+    try:
+        Room = Chatroom.objects.get(pk=room_pk)
+        Room.complaints_counter +=1
+        Room.save()
+    except:
+        pass
+    return redirect('chatRoom:roomsList')
+
 def render_message(request):
     return render(request,'chatMessage.html', )
     

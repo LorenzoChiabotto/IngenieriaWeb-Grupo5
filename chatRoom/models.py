@@ -22,6 +22,8 @@ class Chatroom(models.Model):
     kicked_out_user = models.ManyToManyField(Kicked_out_user,  related_name="Chat_kickeds", blank=True)
     messages_per_minute = models.IntegerField()
     time_between_messages = models.IntegerField()
+    complaints_counter = models.IntegerField()
+    complaints_users = models.ManyToManyField(User_validable,  related_name="Chat_Usersquedenunciaron", blank=True)
     max_users = models.IntegerField()
     duration = models.IntegerField(blank=True,null=True)
     created_at = models.DateTimeField(default=timezone.now)

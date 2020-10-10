@@ -15,6 +15,7 @@ urlpatterns = [
     path('rooms/<str:room_pk>', views.room,  name='room'),
     
     path('rooms/kickUser/<room_pk>/<user_pk>/<user_kick>', views.kickUser,  name='kickUser'),
+    path('rooms/reportRoom/<room_pk>/<user_pk>/',views.reportRoom, name = 'reportRoom'),
 
 ]
 

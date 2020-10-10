@@ -8,7 +8,11 @@
 {{ chat.messages_per_minute|json_script:"messages_per_minute" }}
 <link rel="stylesheet" href="{% static 'chatRoom/styles.css' %}">
 <a href="{%url 'chatRoom:leave' chat.pk request.user.id%}" class="btn btn-danger btn-lg btn-block w-25 m-2"> Leave </a>
-
+{% if chat.administrator.pk != user.pk %}
+    {% if user.user.is_authenticated %}
+        <a href="{%url 'chatRoom:reportRoom' chat.pk request.user.id%}" class="btn btn-danger btn-lg btn-block w-25 m-2"> Denunciar sala </a>
+    {% endif %}
+{% endif %}
 <div class="container-center message-box">
     <div class="flex-row-around">
         <div class="chat-box">
@@ -20,14 +24,15 @@
                         <p class="font-italic m-1 mt-3"> say: [/kick "username"] to kick a user </p>
                     {% endif %}
                     <div class="w-100 flex-row-around mt-0">
-                        <input id="chat-message-input" type="text">
-                        <input id="chat-message-submit" type="submit" value=">>">
+                            <input id="chat-message-input" type="text">
+                            <input id="chat-message-submit" type="submit" value=">>">
                     </div>
                     <div class="attachments mt-2 mb-2 w-100">
                         <input type="file" name="image" accept="image/*" id="image">
                         <input type="file" name="file" id="file">
                     </div>
                 </div>
+
             </form>
         </div>
         <div class="users-box">
