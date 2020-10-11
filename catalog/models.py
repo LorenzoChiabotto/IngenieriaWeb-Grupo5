@@ -7,6 +7,13 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+class MotivosDenuncias(models.Model):
+    name = models.CharField(max_length=30)
+    description = models.CharField(max_length=255)
+    def __str__(self):
+        return self.name
+
+
 class User_validable(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_confirmed = models.BooleanField(default=False)

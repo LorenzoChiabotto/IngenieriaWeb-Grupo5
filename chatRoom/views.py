@@ -11,7 +11,7 @@ from datetime import timedelta
 from django.utils import timezone
 from catalog.models import User_validable
 from .models import Chatroom, Kicked_out_user,Message,Tag
-from .forms import FormMessage, New_Chatroom
+from .forms import FormMessage, New_Chatroom, New_Report
 from django.conf import settings
 
 import json
@@ -102,11 +102,14 @@ def room(request, room_pk):
 
 def reportRoom(request, room_pk,user_pk ):
     try:
-        Room = Chatroom.objects.get(pk=room_pk)
-        Room.complaints_counter +=1
-        Room.save()
+        form_new_Report = New_Report.objects.all()
+        if request.method == 'POST':
+            form_new_Report = New_Report(request.POST)
+            pass
     except:
         pass
+
+
     return redirect('chatRoom:roomsList')
 
 def render_message(request):

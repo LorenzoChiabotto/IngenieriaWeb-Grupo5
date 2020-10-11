@@ -10,7 +10,38 @@
 <a href="{%url 'chatRoom:leave' chat.pk request.user.id%}" class="btn btn-danger btn-lg btn-block w-25 m-2"> Leave </a>
 {% if chat.administrator.pk != user.pk %}
     {% if user.user.is_authenticated %}
-        <a href="{%url 'chatRoom:reportRoom' chat.pk request.user.id%}" class="btn btn-danger btn-lg btn-block w-25 m-2"> Denunciar sala </a>
+        <!--<a href="{%url 'chatRoom:reportRoom' chat.pk request.user.id%}" class="btn btn-danger btn-lg btn-block w-25 m-2"> Denunciar sala </a>-->
+        <a href="#victorModal" role="button" class="btn btn-large btn-primary" data-toggle="modal">Denunciar Sala</a>
+                <!-- Modal / Ventana / Overlay en HTML -->
+        <div id="victorModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>Seleccione el motivo de la denuncia</p>
+                        <!--<p class="text-warning"><small>alerta amarillo.</small></p>-->
+
+                        <div class="dropdown">
+                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Seleccione Motivo denuncia
+                          </button>
+                            <form method="POST" action="">
+                            {% csrf_token %}
+                                {% for field in form_new_Report %}
+                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#">{{ field.label }}</a>
+                                      </div>
+                                {% endfor %}
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-danger">Denunciar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     {% endif %}
 {% endif %}
 <div class="container-center message-box">

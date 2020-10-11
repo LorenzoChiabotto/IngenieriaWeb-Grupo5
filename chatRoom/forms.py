@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Message, Tag, Chatroom
+from .models import Message, Tag, Chatroom,MotivosDenuncias, Denuncias
 from django.forms import ModelForm,TextInput, Textarea, ModelChoiceField, SelectMultiple
 
 class New_Chatroom(ModelForm):
@@ -27,7 +27,16 @@ class New_Chatroom(ModelForm):
 
 
 
+class New_Report(ModelForm):
+    motivos = MotivosDenuncias.objects.all()
+    class Meta:
+        model = Denuncias
+        fields = ["motivos"]
+        widgets = {
+            'motivos' : SelectMultiple(attrs={'class':'form-control'})
+        }
 
+    pass
 class FormMessage(ModelForm):
     class Meta:
         model = Message
