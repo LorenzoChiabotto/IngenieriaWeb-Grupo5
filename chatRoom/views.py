@@ -169,7 +169,7 @@ def send_message(request):
             message = form_message.save()
             message.message = strMessage
             message.type = strType
-            message.user = strUserPk
+            message.user = User_validable.objects.get(pk=strUserPk)
             message.save()
             return JsonResponse(
                 {

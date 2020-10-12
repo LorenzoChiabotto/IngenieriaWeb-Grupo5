@@ -18,3 +18,24 @@
 #id_motives{
     list-style-type: none;
 }
+
+
+.chat-header{
+    margin-top: 15px;
+    margin-left: 15px;
+    margin-right: 15px;
+    display: flex;
+    justify-content: flex-start;
+}
+.chat-header h1{
+    display: inline;
+    align-self: center;
+}
+
+#leave-chatroom, #open-report-modal{
+    align-self: center;
+    margin-left: 15px;
+}
+.custom-file{
+    margin-bottom: 5px;
+}

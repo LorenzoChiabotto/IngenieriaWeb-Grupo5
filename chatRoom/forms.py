@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from .models import Message, Tag, Chatroom, Reports
-from django.forms import ModelForm,TextInput, Textarea, ModelChoiceField, SelectMultiple, CheckboxSelectMultiple
+from django.forms import ModelForm,TextInput, Textarea, ModelChoiceField, SelectMultiple, CheckboxSelectMultiple, FileInput
 from catalog.models import ReportTypes
 
 

@@ -7,7 +7,10 @@ document.querySelector('#chat-message-submit').onclick = function (e) {
     const messageFileInput = document.getElementById('file');
     const messageImageInput = document.getElementById('image');
     const message = messageInputDom.value;
-    if (message === "" && messageImageInput.value == null && messageFileInput.value  == null){
+    console.log(message)
+    console.log(messageImageInput.value)
+    console.log(messageFileInput.value)
+    if (message === "" && messageImageInput.value == "" && messageFileInput.value  == ""){
         return
     }
 
@@ -24,4 +27,21 @@ document.querySelector('#chat-message-submit').onclick = function (e) {
         messageImageInput.value = null;
     }
     req.send(formData);
+
+    document.querySelectorAll(".custom-file-label")[0].innerHTML ="Select an image"
+    document.querySelectorAll(".custom-file-label")[1].innerHTML ="Select a file"
 };
+
+$('#image').on('change',function(){
+    //get the file name
+    var fileName = $(this).val().replace('C:\\fakepath\\', " ");
+    //replace the "Choose a file" label
+    $(this).next('.custom-file-label').html(fileName);
+})
+
+$('#file').on('change',function(){
+    //get the file name
+    var fileName = $(this).val().replace('C:\\fakepath\\', " ");
+    //replace the "Choose a file" label
+    $(this).next('.custom-file-label').html(fileName);
+})

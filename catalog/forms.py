@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
+from django.contrib.auth import authenticate
 from datetime import date
-
 
 class SignUp(forms.Form):
     user = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'class':'form-control'}))
@@ -50,5 +50,26 @@ class SignUp(forms.Form):
 class Login(forms.Form):
     user = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class':'form-control'}))
     password = forms.CharField(max_length=20,widget=forms.PasswordInput(attrs={'class':'form-control'}))
+
+    def clean_user(self):
+        user = self.cleaned_data['user']
+        if not User.objects.filter(username=user).exists():
+            raise ValidationError("This user does not exist.")
+        return user
+
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        try:
+            username = self.cleaned_data['user']
+        except:
+            return password
+        
+        if(username is not None):
+            user = authenticate(username=username, password=password)
+            if user is None:
+                raise ValidationError("Incorrect password.")
+            print(user.password)
+            return password
+        return password
 
 

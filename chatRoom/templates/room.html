@@ -8,28 +8,49 @@
 {{ chat.messages_per_minute|json_script:"messages_per_minute" }}
 
 <link rel="stylesheet" href="{% static 'chatRoom/styles.css' %}">
-<a href="{%url 'chatRoom:leave' chat.pk request.user.id%}" class="btn btn-danger btn-lg btn-block w-25 m-2"> Leave </a>
-{% if chat.administrator.pk != user.pk %}
+<div class="chat-header">
+    <h1 class="display-4">{{chat.name}}</h1>
+    <a href="{%url 'chatRoom:leave' chat.pk request.user.id%}" class="btn btn-large btn-secondary"
+        title="Leave chatroom" id="leave-chatroom">
+        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-box-arrow-in-left" fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+                d="M10 3.5a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 1 1 0v2A1.5 1.5 0 0 1 9.5 14h-8A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2h8A1.5 1.5 0 0 1 11 3.5v2a.5.5 0 0 1-1 0v-2z" />
+            <path fill-rule="evenodd"
+                d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
+        </svg>
+    </a>
+    {% if chat.administrator.pk != user.pk %}
     {% if user.user.is_authenticated %}
-        <a href="#victorModal" role="button" class="btn btn-large btn-primary" data-toggle="modal">Report chatroom</a>
-        <div id="victorModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <form method="POST" action="reportRoom/{{chat.pk}}">
-                            {% csrf_token %}
-                            {{ form_report_chatroom }}                    
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-danger">Report</button>
-                        </div>
-                    </form>
+    <a href="#victorModal" role="button" class="btn btn-large btn-danger" data-toggle="modal" title="Report chatroom"
+        id="open-report-modal">
+        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-clipboard-x" fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+                d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" />
+            <path fill-rule="evenodd"
+                d="M9.5 1h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3zm-.354 7.146a.5.5 0 0 1 .708 0L8 8.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 9l1.147 1.146a.5.5 0 0 1-.708.708L8 9.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 9 6.146 7.854a.5.5 0 0 1 0-.708z" />
+        </svg>
+    </a>
+    <div id="victorModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form method="POST" action="reportRoom/{{chat.pk}}">
+                        {% csrf_token %}
+                        {{ form_report_chatroom }}
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Report</button>
+                </div>
+                </form>
             </div>
         </div>
+    </div>
     {% endif %}
-{% endif %}
+    {% endif %}
+</div>
 <div class="container-center message-box">
     <div class="flex-row-around">
         <div class="chat-box">
@@ -41,17 +62,23 @@
                     <p class="font-italic m-1 mt-3"> say: [/kick "username"] to kick a user </p>
                     {% endif %}
                     {% if user.user.is_authenticated %}
-                    <div class="w-100 flex-row-around mt-0">
-                        <input id="chat-message-input" type="text">
-                        <input id="chat-message-submit" type="submit" value=">>">
+                    <div class="w-100 flex-row-around mt-0 mb-0">
+                        <input id="chat-message-input" type="text" class="form-control mr-1">
+                        <input id="chat-message-submit" type="submit" value=">>" class="btn btn-success">
                     </div>
                     <div class="attachments mt-2 mb-2 w-100">
-                        <input type="file" name="image" accept="image/*" id="image">
-                        <input type="file" name="file" id="file">
+                        <div class="custom-file">
+                            <input type="file" name="image" accept="image/*" id="image" class="custom-file-input" aria-describedby="imageAddon01">
+                            <label class="custom-file-label" for="image">Select an image</label>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" name="file" id="file" class="custom-file-input" aria-describedby="fileAddon01">
+                            <label class="custom-file-label">Select a file</label>
+                        </div>
                     </div>
                     {% endif %}
                 </div>
-                
+
             </form>
         </div>
         <div class="users-box">
@@ -67,7 +94,7 @@
     </div>
     <script src="{% static 'chatRoom/chatReceiveMessagesHandler.js' %}"></script>
     {% if user.user.is_authenticated %}
-        <script src="{% static 'chatRoom/chatSendMessagesHandler.js' %}"></script>
+    <script src="{% static 'chatRoom/chatSendMessagesHandler.js' %}"></script>
     {%endif%}
 </div>
 {% endblock %}
