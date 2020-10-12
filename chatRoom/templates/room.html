@@ -6,42 +6,28 @@
 {{ chat.pk|json_script:"room_id" }}
 {{ chat.time_between_messages|json_script:"time_between_messages" }}
 {{ chat.messages_per_minute|json_script:"messages_per_minute" }}
+
 <link rel="stylesheet" href="{% static 'chatRoom/styles.css' %}">
 <a href="{%url 'chatRoom:leave' chat.pk request.user.id%}" class="btn btn-danger btn-lg btn-block w-25 m-2"> Leave </a>
 {% if chat.administrator.pk != user.pk %}
     {% if user.user.is_authenticated %}
-        <!--<a href="{%url 'chatRoom:reportRoom' chat.pk request.user.id%}" class="btn btn-danger btn-lg btn-block w-25 m-2"> Denunciar sala </a>-->
-        <a href="#victorModal" role="button" class="btn btn-large btn-primary" data-toggle="modal">Denunciar Sala</a>
-                <!-- Modal / Ventana / Overlay en HTML -->
+        <a href="#victorModal" role="button" class="btn btn-large btn-primary" data-toggle="modal">Report chatroom</a>
         <div id="victorModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <p>Seleccione el motivo de la denuncia</p>
-                        <!--<p class="text-warning"><small>alerta amarillo.</small></p>-->
-
-                        <div class="dropdown">
-                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Seleccione Motivo denuncia
-                          </button>
-                            <form method="POST" action="">
+                        <form method="POST" action="reportRoom/{{chat.pk}}">
                             {% csrf_token %}
-                                {% for field in form_new_Report %}
-                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" href="#">{{ field.label }}</a>
-                                      </div>
-                                {% endfor %}
-                            </form>
+                            {{ form_report_chatroom }}                    
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-danger">Denunciar</button>
-                    </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Report</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-
     {% endif %}
 {% endif %}
 <div class="container-center message-box">
@@ -52,18 +38,20 @@
                 {% csrf_token %}
                 <div class="send-messagge-box w-100 container-center-no-m">
                     {% if chat.administrator.pk == user.pk %}
-                        <p class="font-italic m-1 mt-3"> say: [/kick "username"] to kick a user </p>
+                    <p class="font-italic m-1 mt-3"> say: [/kick "username"] to kick a user </p>
                     {% endif %}
+                    {% if user.user.is_authenticated %}
                     <div class="w-100 flex-row-around mt-0">
-                            <input id="chat-message-input" type="text">
-                            <input id="chat-message-submit" type="submit" value=">>">
+                        <input id="chat-message-input" type="text">
+                        <input id="chat-message-submit" type="submit" value=">>">
                     </div>
                     <div class="attachments mt-2 mb-2 w-100">
                         <input type="file" name="image" accept="image/*" id="image">
                         <input type="file" name="file" id="file">
                     </div>
+                    {% endif %}
                 </div>
-
+                
             </form>
         </div>
         <div class="users-box">
@@ -77,6 +65,9 @@
             </ul>
         </div>
     </div>
-    <script src="{% static 'chatRoom/chatHandler.js' %}"></script>
+    <script src="{% static 'chatRoom/chatReceiveMessagesHandler.js' %}"></script>
+    {% if user.user.is_authenticated %}
+        <script src="{% static 'chatRoom/chatSendMessagesHandler.js' %}"></script>
+    {%endif%}
 </div>
 {% endblock %}

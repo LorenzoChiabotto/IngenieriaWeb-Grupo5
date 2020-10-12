@@ -7,7 +7,7 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
-class MotivosDenuncias(models.Model):
+class ReportTypes(models.Model):
     name = models.CharField(max_length=30)
     description = models.CharField(max_length=255)
     def __str__(self):

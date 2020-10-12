@@ -14,3 +14,7 @@
     width: 98%;
     align-self: center;
 }
+
+#id_motives{
+    list-style-type: none;
+}

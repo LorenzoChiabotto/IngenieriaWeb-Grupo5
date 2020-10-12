@@ -10,7 +10,7 @@ from django.http import HttpResponse, JsonResponse
 from datetime import timedelta
 from django.utils import timezone
 from catalog.models import User_validable
-from .models import Chatroom, Kicked_out_user,Message,Tag
+from .models import Chatroom, Kicked_out_user,Message,Tag, ReportTypes, Reports
 from .forms import FormMessage, New_Chatroom, New_Report
 from django.conf import settings
 
@@ -86,6 +86,7 @@ def create_chat_room(request):
 
 def room(request, room_pk):
     chat = Chatroom.objects.get(pk=room_pk)
+    form_report_chatroom = New_Report()
     form_send_message = FormMessage()
     if chat is not None:
         try:
@@ -94,20 +95,30 @@ def room(request, room_pk):
             chat.users.add(request.user)
         except:
             pass
-
-        return render(request,'room.html', {"chat": chat, 'form_send_message':form_send_message, 'room':room_pk})
+        return render(request,'room.html', {"chat": chat, 'form_send_message':form_send_message, 'room':room_pk, 'form_report_chatroom':form_report_chatroom})
     else:
         return render(None, '')
         
 
-def reportRoom(request, room_pk,user_pk ):
-    try:
-        form_new_Report = New_Report.objects.all()
-        if request.method == 'POST':
-            form_new_Report = New_Report(request.POST)
+def reportRoom(request, room_pk):
+#try:
+    if request.method == 'POST':
+        user = User_validable.objects.get(user=User.objects.get(username=request.user))
+        chat = Chatroom.objects.get(pk=room_pk)
+        form_report = New_Report(request.POST)
+
+        if form_report.is_valid():
+            report = Reports.objects.create(
+                description=form_report.cleaned_data['description'],
+                usuario=user
+            )
+            report.motives.set(form_report.cleaned_data['motives'])
+            report.save()
+            chat.reports.add(report)
+            chat.save()
             pass
-    except:
-        pass
+#except:
+#    pass
 
 
     return redirect('chatRoom:roomsList')
@@ -221,12 +232,3 @@ def kickUser(room_pk, user_pk,user_kick):
     except:
         return None
     
-
-
-"""
-user = models.ForeignKey(User_validable, on_delete=models.CASCADE)
-    message = models.CharField(max_length=255, blank=True)
-    image = models.ImageField(upload_to="messages_images", blank=True)
-    file = models.FileField(upload_to="messages_files", blank=True)
-    time = models.TimeField(default=now)
-    chatroom = models.ForeignKey(Chatroom, on_delete=models.CASCADE)"""

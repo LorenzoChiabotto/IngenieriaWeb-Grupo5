@@ -4,6 +4,8 @@ from . import views
 
 app_name = 'chatRoom'
 urlpatterns = [
+    path('rooms/reportRoom/<room_pk>',views.reportRoom, name = 'reportRoom'),
+
     path('render_message', views.render_message,  name='render_message'),
     path('render_user_message', views.render_user_message,  name='render_user_message'),
     path('send_message', views.send_message,  name='send_message'),
@@ -15,7 +17,6 @@ urlpatterns = [
     path('rooms/<str:room_pk>', views.room,  name='room'),
     
     path('rooms/kickUser/<room_pk>/<user_pk>/<user_kick>', views.kickUser,  name='kickUser'),
-    path('rooms/reportRoom/<room_pk>/<user_pk>/',views.reportRoom, name = 'reportRoom'),
 
 ]
 

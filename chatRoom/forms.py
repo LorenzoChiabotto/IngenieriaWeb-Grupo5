@@ -1,7 +1,9 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Message, Tag, Chatroom,MotivosDenuncias, Denuncias
-from django.forms import ModelForm,TextInput, Textarea, ModelChoiceField, SelectMultiple
+from .models import Message, Tag, Chatroom, Reports
+from django.forms import ModelForm,TextInput, Textarea, ModelChoiceField, SelectMultiple, CheckboxSelectMultiple
+from catalog.models import ReportTypes
+
 
 class New_Chatroom(ModelForm):
     tags = forms.ModelChoiceField(queryset=Tag.objects.all()),
@@ -28,12 +30,15 @@ class New_Chatroom(ModelForm):
 
 
 class New_Report(ModelForm):
-    motivos = MotivosDenuncias.objects.all()
+    #motives = forms.MultipleChoiceField(choices=)
+    motives = forms.MultipleChoiceField(choices=ReportTypes.objects.all()),
+
     class Meta:
-        model = Denuncias
-        fields = ["motivos"]
+        model = Reports
+        fields = ["motives", "description"]
         widgets = {
-            'motivos' : SelectMultiple(attrs={'class':'form-control'})
+            'motives' : CheckboxSelectMultiple(),
+            'description': Textarea(attrs={'class':'form-control'})
         }
 
     pass
