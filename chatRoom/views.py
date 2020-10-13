@@ -123,6 +123,18 @@ def reportRoom(request, room_pk):
 
     return redirect('chatRoom:roomsList')
 
+def manageReports(request):
+    try:
+        request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
+
+    except:
+        pass
+    rooms = Chatroom.objects.all()
+    filteredRooms = list(filter(lambda chatroom: not chatroom.duration or (chatroom.created_at.__add__(timedelta(hours=chatroom.duration)) > timezone.now()), rooms))
+    contexto = {'rooms': filteredRooms}
+
+    return render(request, 'manageReports.html',contexto)
+
 def render_message(request):
     return render(request,'chatMessage.html', )
     
