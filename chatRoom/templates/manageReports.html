@@ -3,73 +3,74 @@
 <h1 class="display-4">Manage Reports</h1>
 <div class="container">
     {% if rooms %}
-    {% for room in rooms %}
+    <div class="flex-row-evenly">
+        {% for room in rooms %}
+        <div class="card m-3" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{room.name}}</h5>
+                <p class="card-text">{{room.description}}</p>
+                <a href="#victorModal{{room.pk}}" role="button" class="btn btn-large btn-danger w-100"
+                    data-toggle="modal" title="ManageRoom" id="open-report-modal">
+                    <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-clipboard-x" fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" />
+                        <path fill-rule="evenodd"
+                            d="M9.5 1h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3zm-.354 7.146a.5.5 0 0 1 .708 0L8 8.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 9l1.147 1.146a.5.5 0 0 1-.708.708L8 9.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 9 6.146 7.854a.5.5 0 0 1 0-.708z" />
+                    </svg>
+                </a>
 
-    <div class="card m-3" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">{{room.name}}</h5>
-            <p class="card-text">{{room.description}}</p>
-            <a href="#victorModal{{room.pk}}" role="button" class="btn btn-large btn-danger w-100" data-toggle="modal"
-                title="ManageRoom" id="open-report-modal">
-                <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-clipboard-x" fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" />
-                    <path fill-rule="evenodd"
-                        d="M9.5 1h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3zm-.354 7.146a.5.5 0 0 1 .708 0L8 8.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 9l1.147 1.146a.5.5 0 0 1-.708.708L8 9.707l-1.146 1.147a.5.5 0 0 1-.708-.708L7.293 9 6.146 7.854a.5.5 0 0 1 0-.708z" />
-                </svg>
-            </a>
-
-            <div class="flex-row-evenly">
-                {% for tag in room.tags.all %}
-                <div class="badge badge-pill badge-primary p-1 mt-2">
-                    <a href="#" class="text-decoration-none text-white m-1">{{tag.name}} </a>
+                <div class="flex-row-evenly">
+                    {% for tag in room.tags.all %}
+                    <div class="badge badge-pill badge-primary p-1 mt-2">
+                        <a href="#" class="text-decoration-none text-white m-1">{{tag.name}} </a>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
         </div>
-    </div>
 
-    <div id="victorModal{{room.pk}}" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form method="POST" action="manageReportsDelete/{{room.pk}}">
-                    <div class="modal-body">
-                        <h6 class="display-6">Reports History:</h6>
-                        <div>
-                            <ul class="list-group list-group-flush">
-                                {% for report in room.reports.all %}
-                                <li class="list-group-item">
-                                    <p class="font-weight-bold">{{report.usuario}}</p>
-                                    <ul class="list-group list-group-horizontal">
-                                        {% for treport in report.motives.all %}
-                                        <li class="list-group-item">{{treport.name}}</li>
-                                        {% endfor %}
-                                    </ul>
-                                    <p class="text-break">{{report.description}}</p>
-
-                                </li>
-
-                                {% endfor %}
-                            </ul>
-
-                        </div>
+        <div id="victorModal{{room.pk}}" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="POST" action="manageReportsDelete/{{room.pk}}">
                         <div class="modal-body">
-                            {% csrf_token %}
-                            {{ form_report_chatroom }}
-                        </div>
+                            <h6 class="display-6">Reports History:</h6>
+                            <div>
+                                <ul class="list-group list-group-flush">
+                                    {% for report in room.reports.all %}
+                                    <li class="list-group-item">
+                                        <p class="font-weight-bold">{{report.usuario}}</p>
+                                        <ul class="list-group list-group-horizontal">
+                                            {% for treport in report.motives.all %}
+                                            <li class="list-group-item">{{treport.name}}</li>
+                                            {% endfor %}
+                                        </ul>
+                                        <p class="text-break">{{report.description}}</p>
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-danger">Delete chatroom</button>
-                    </div>
-                </form>
+                                    </li>
+
+                                    {% endfor %}
+                                </ul>
+
+                            </div>
+                            <div class="modal-body">
+                                {% csrf_token %}
+                                {{ form_report_chatroom }}
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-danger">Delete chatroom</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 
-    {% endfor %}
+        {% endfor %}
+    </div>
     {% endif %}
 </div>
 
