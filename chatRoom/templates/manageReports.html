@@ -22,8 +22,23 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-body">
-                            <a>Historial Denuncias</a>
-                            <br>{{room.reports}}<br>
+                            <a>Historial Denuncias</a><br>
+                            <a>Usuario</a>
+                            <div>
+                                {% for report in room.reports.all %}
+                                <br>{{report.usuario}}
+                                {% for treport in room.reports.motives.all %}
+                                    <br>{{treport.name}}
+                                {% endfor %}
+                            <br>
+                            {% endfor %}
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="reportRoom/{{chat.pk}}">
+                                    {% csrf_token %}
+                                    {{ form_report_chatroom }}
+                            </div>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
