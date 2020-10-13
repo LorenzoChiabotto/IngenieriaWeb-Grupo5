@@ -14,19 +14,16 @@ document.querySelector('#chat-message-submit').onclick = function (e) {
     var req = new XMLHttpRequest(); 
     req.open('POST', '/chat/send_message', true); 
     req.overrideMimeType("application/json");
-    formData = new FormData(document.querySelector('form'));
+    formData = new FormData(document.getElementById('formularioSendMessage'));
     formData.append("user",document.getElementById('user_id').textContent);
     formData.append("chatroom", room_id);
     formData.append("message", message);
     req.onload  = function() {
         messageInputDom.value = '';
-        messageFileInput.value = null;
-        messageImageInput.value = null;
+        document.querySelectorAll(".custom-file-label")[0].innerHTML ="Select an image"
+        document.querySelectorAll(".custom-file-label")[1].innerHTML ="Select a file"
     }
     req.send(formData);
-
-    document.querySelectorAll(".custom-file-label")[0].innerHTML ="Select an image"
-    document.querySelectorAll(".custom-file-label")[1].innerHTML ="Select a file"
 };
 
 $('#image').on('change',function(){
