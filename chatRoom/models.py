@@ -47,7 +47,7 @@ class Message(models.Model):
     message = models.CharField(max_length=255, blank=True)
     image = models.ImageField(upload_to="messages_images", blank=True)
     file = models.FileField(upload_to="messages_files", blank=True)
-    time = models.TimeField(default=now)
+    time = models.DateTimeField(default=now)
     chatroom = models.ForeignKey(Chatroom, on_delete=models.CASCADE)
     type = models.CharField(max_length=255, default='chat_message')
 
