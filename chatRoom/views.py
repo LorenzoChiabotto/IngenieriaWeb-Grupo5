@@ -126,7 +126,22 @@ def reportRoom(request, room_pk):
 def manageReports(request):
     try:
         request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
+    except:
+        pass
+    rooms = Chatroom.objects.all()
+    filteredRooms = list(filter(lambda chatroom: not chatroom.duration or (chatroom.created_at.__add__(timedelta(hours=chatroom.duration)) > timezone.now()), rooms))
+    contexto = {'rooms': filteredRooms}
 
+    return render(request, 'manageReports.html',contexto)
+
+def manageReportsDelete(request, room_pk):
+    try:
+        request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
+        if request.method == 'POST':
+            user = User_validable.objects.get(user=User.objects.get(username=request.user))
+            sala = Chatroom.objects.get(pk=room_pk)
+            sala.duration = 0
+            sala.save()
     except:
         pass
     rooms = Chatroom.objects.all()
