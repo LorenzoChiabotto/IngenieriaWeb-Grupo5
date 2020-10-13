@@ -142,9 +142,9 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER ="tusitioWebChat@gmail.com"
 EMAIL_HOST_PASSWORD = "Esternocleidomastoeideo2"
 
-#RECAPTCHA_PUBLIC_KEY = ''
-#RECAPTCHA_PRIVATE_KEY = ''
-SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+RECAPTCHA_PUBLIC_KEY = '6LcwisUZAAAAAJlUR-0dXzWuG8ENweh1f1nLxFbi'
+RECAPTCHA_PRIVATE_KEY = '6LcwisUZAAAAAPkyzKMakvem_yixwDbGFdftd2e2'
+#SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 
 django_heroku.settings(locals())
