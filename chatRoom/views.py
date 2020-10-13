@@ -151,25 +151,18 @@ def send_message(request):
         if(str(strMessage).startswith("/kick ")):
             splitted = str(strMessage).split(" ")
             if(len(splitted) == 2):
-                strUserPk = kickUser(request.POST.get("chatroom"), request.POST.get("user"), splitted[1])
+                strUserPk = User.objects.get(username=kickUser(request.POST.get("chatroom"), request.POST.get("user"), splitted[1]))
                 if(strUserPk is None):
                     return JsonResponse({})
                 strType = 'kick_message'
                 strMessage = splitted[1] + " has been kicked out"
-        if(str(strMessage).startswith("/ban ")):
-            splitted = str(strMessage).split(" ")
-            if(splitted.count != 3):
-                if(not kickUser(request.POST.get("chatroom"), request.POST.get("user"), splitted[1]), splitted[2]):
-                    return JsonResponse({})
-                strType = 'ban_message'
-                strMessage = splitted[1] + " has been banned - " + splitted[2]
                 
         form_message = FormMessage(request.POST, request.FILES)
         if form_message.is_valid():
             message = form_message.save()
             message.message = strMessage
             message.type = strType
-            message.user = User_validable.objects.get(pk=strUserPk)
+            message.user = User_validable.objects.get(user=strUserPk)
             message.save()
             return JsonResponse(
                 {
