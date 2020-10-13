@@ -148,3 +148,12 @@ SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 
 django_heroku.settings(locals())
+
+if os.environ.get('SEARCHBOX_URL'):
+    HAYSTACK_CONNECTIONS = {
+        'default': {
+            'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+            'URL': os.environ.get('SEARCHBOX_URL'),
+            'INDEX_NAME': 'documents',
+        },
+    }

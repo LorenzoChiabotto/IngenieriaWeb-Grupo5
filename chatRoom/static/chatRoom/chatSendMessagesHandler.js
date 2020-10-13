@@ -7,9 +7,6 @@ document.querySelector('#chat-message-submit').onclick = function (e) {
     const messageFileInput = document.getElementById('file');
     const messageImageInput = document.getElementById('image');
     const message = messageInputDom.value;
-    console.log(message)
-    console.log(messageImageInput.value)
-    console.log(messageFileInput.value)
     if (message === "" && messageImageInput.value == "" && messageFileInput.value  == ""){
         return
     }
