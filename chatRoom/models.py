@@ -5,7 +5,7 @@ from django.utils.timezone import now
 
 class Kicked_out_user(models.Model):
     user = models.ForeignKey(User_validable, on_delete=models.NOT_PROVIDED,)
-    time = models.TimeField()
+    time = models.DateTimeField(default=timezone.now)
     def __str__(self):
         return self.user.user.username
 
@@ -47,7 +47,7 @@ class Message(models.Model):
     message = models.CharField(max_length=255, blank=True)
     image = models.ImageField(upload_to="messages_images", blank=True)
     file = models.FileField(upload_to="messages_files", blank=True)
-    time = models.DateTimeField(default=now)
+    time = models.DateTimeField(default=timezone.now)
     chatroom = models.ForeignKey(Chatroom, on_delete=models.CASCADE)
     type = models.CharField(max_length=255, default='chat_message')
 

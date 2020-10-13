@@ -147,10 +147,8 @@ function getMessages() {
                     break;
                 case "kick_message":
                     if(document.getElementById('user_id').textContent == data.userId){
-                            if(kickeableCount >= jsonResponse.length){
                                 alert(data.message);
                                 window.location.replace("/");
-                            }
                     }else{
                         var x = document.createElement('div')
                         x.style.display= 'flex'
@@ -166,10 +164,8 @@ function getMessages() {
                     break;
                 case "ban_message":
                     if(document.getElementById('user_id').textContent == data.userId){
-                        if(kickeableCount >= jsonResponse.length){
                             alert(data.message)
                             window.location.replace("/");
-                        }
                     }else{
                         var x = document.createElement('div')
                         x.style.display= 'flex'
@@ -187,7 +183,6 @@ function getMessages() {
                 default:
                     break;
             }
-            kickeableCount++
         }
         if(scrollable){
             chatLog.scrollTop = chatLog.scrollHeight
