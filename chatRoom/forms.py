@@ -30,9 +30,9 @@ class New_Chatroom(ModelForm):
 class New_Report(ModelForm):
     class Meta:
         model = Report
-        fields = ["types", "description"]
+        fields = ["motives", "description"]
         widgets = {
-            'types' : CheckboxSelectMultiple(),
+            'motives' : CheckboxSelectMultiple(),
             'description': Textarea(attrs={'class':'form-control'})
         }
 

@@ -18,7 +18,7 @@ class Type_Report(models.Model):
 
 class Report(models.Model):
     usuario = models.ForeignKey(User_validable, on_delete=models.NOT_PROVIDED)
-    types = models.ManyToManyField('chatRoom.Type_Report', related_name="Reports_Motives")
+    motives = models.ManyToManyField('chatRoom.Type_Report', related_name="Reports_Motives")
     description = models.CharField(max_length=255)
     def __str__(self):
         return self.description
