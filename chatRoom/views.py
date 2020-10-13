@@ -140,7 +140,7 @@ def manageReportsDelete(request, room_pk):
         if request.method == 'POST':
             user = User_validable.objects.get(user=User.objects.get(username=request.user))
             sala = Chatroom.objects.get(pk=room_pk)
-            sala.duration = 0
+            sala.duration = -1
             sala.save()
     except:
         pass
