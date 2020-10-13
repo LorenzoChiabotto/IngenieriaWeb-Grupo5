@@ -1,0 +1,3 @@
+{{ object.name }}
+{{ object.Tag.name }}
+{{ object.description }}

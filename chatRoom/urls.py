@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from . import views
 
@@ -17,6 +17,8 @@ urlpatterns = [
     path('rooms/<str:room_pk>', views.room,  name='room'),
     
     path('rooms/kickUser/<room_pk>/<user_pk>/<user_kick>', views.kickUser,  name='kickUser'),
+
+    path('search/', include('haystack.urls')),
 
 ]
 
