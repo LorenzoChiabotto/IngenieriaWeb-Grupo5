@@ -148,7 +148,7 @@ def manageReportsDelete(request, room_pk):
     filteredRooms = list(filter(lambda chatroom: not chatroom.duration or (chatroom.created_at.__add__(timedelta(hours=chatroom.duration)) > timezone.now()), rooms))
     contexto = {'rooms': filteredRooms}
 
-    return render(request, 'manageReports.html',contexto)
+    return redirect('chatRoom:manageReports')
 
 def render_message(request):
     return render(request,'chatMessage.html', )
