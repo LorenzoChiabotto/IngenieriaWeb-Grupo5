@@ -181,9 +181,9 @@ def send_message(request):
 def get_messages(request, room_pk, last_time):
     if(request.method == 'GET'):
         if(last_time != "0"):
-            messages = Message.objects.filter(chatroom=room_pk, time__gt=last_time)
+            messages = Message.objects.filter(chatroom=room_pk, time__gt=last_time).order_by('time')
         else:
-            messages = Message.objects.filter(chatroom=room_pk)
+            messages = Message.objects.filter(chatroom=room_pk).order_by('time')
 
         returnMessages = []
         for message in messages:
