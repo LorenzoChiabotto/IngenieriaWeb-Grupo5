@@ -1,5 +1,5 @@
 from django.db import models
-from catalog.models import User_validable, User, Tag, ReportTypes
+from catalog.models import User_validable, User, Tag
 from django.utils import timezone
 from django.utils.timezone import now
 
@@ -9,9 +9,16 @@ class Kicked_out_user(models.Model):
     def __str__(self):
         return self.user.user.username
 
-class Reports(models.Model):
+
+class Type_Report(models.Model):
+    name = models.CharField(max_length=30)
+    description = models.CharField(max_length=255)
+    def __str__(self):
+        return self.name
+
+class Report(models.Model):
     usuario = models.ForeignKey(User_validable, on_delete=models.NOT_PROVIDED)
-    motives = models.ManyToManyField(ReportTypes, related_name="Reports_Motives")
+    types = models.ManyToManyField('chatRoom.Type_Report', related_name="Reports_Motives")
     description = models.CharField(max_length=255)
     def __str__(self):
         return self.description
@@ -24,7 +31,7 @@ class Chatroom(models.Model):
     tags = models.ManyToManyField(Tag, related_name="Chatroom_tags")
     users = models.ManyToManyField(User_validable,  related_name="Chat_users", blank=True)
     banned_users = models.ManyToManyField(User_validable,  related_name="Chat_banned", blank=True)
-    reports = models.ManyToManyField(Reports,  related_name="Chat_reports", blank=True)
+    reports = models.ManyToManyField('chatRoom.Report',  related_name="Chat_reports", blank=True)
     kicked_out_user = models.ManyToManyField(Kicked_out_user,  related_name="Chat_kickeds", blank=True)
     messages_per_minute = models.IntegerField()
     time_between_messages = models.IntegerField()

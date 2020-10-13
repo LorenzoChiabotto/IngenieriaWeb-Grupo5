@@ -1,12 +1,10 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Message, Tag, Chatroom, Reports
+from .models import Message, Chatroom, Report
 from django.forms import ModelForm,TextInput, Textarea, ModelChoiceField, SelectMultiple, CheckboxSelectMultiple, FileInput
-from catalog.models import ReportTypes
 
 
 class New_Chatroom(ModelForm):
-    tags = forms.ModelChoiceField(queryset=Tag.objects.all()),
     class Meta:
         model = Chatroom
         fields = ["name","description","tags","messages_per_minute","time_between_messages", "max_users", "duration"]
@@ -30,14 +28,11 @@ class New_Chatroom(ModelForm):
 
 
 class New_Report(ModelForm):
-    #motives = forms.MultipleChoiceField(choices=)
-    motives = forms.MultipleChoiceField(choices=ReportTypes.objects.all()),
-
     class Meta:
-        model = Reports
-        fields = ["motives", "description"]
+        model = Report
+        fields = ["types", "description"]
         widgets = {
-            'motives' : CheckboxSelectMultiple(),
+            'types' : CheckboxSelectMultiple(),
             'description': Textarea(attrs={'class':'form-control'})
         }
 

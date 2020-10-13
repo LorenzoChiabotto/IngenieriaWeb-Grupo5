@@ -10,7 +10,7 @@ from django.http import HttpResponse, JsonResponse
 from datetime import timedelta
 from django.utils import timezone
 from catalog.models import User_validable
-from .models import Chatroom, Kicked_out_user,Message,Tag, ReportTypes, Reports
+from .models import Chatroom, Kicked_out_user,Message,Tag, Report
 from .forms import FormMessage, New_Chatroom, New_Report
 from django.conf import settings
 
@@ -108,7 +108,7 @@ def reportRoom(request, room_pk):
         form_report = New_Report(request.POST)
 
         if form_report.is_valid():
-            report = Reports.objects.create(
+            report = Report.objects.create(
                 description=form_report.cleaned_data['description'],
                 usuario=user
             )
