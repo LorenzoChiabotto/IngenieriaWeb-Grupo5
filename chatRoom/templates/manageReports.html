@@ -9,7 +9,7 @@
         <div class="card-body">
             <h5 class="card-title">{{room.name}}</h5>
             <p class="card-text">{{room.description}}</p>
-            <a href="#victorModal" role="button" class="btn btn-large btn-danger w-100" data-toggle="modal"
+            <a href="#victorModal{{room.pk}}" role="button" class="btn btn-large btn-danger w-100" data-toggle="modal"
                 title="ManageRoom" id="open-report-modal">
                 <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-clipboard-x" fill="currentColor"
                     xmlns="http://www.w3.org/2000/svg">
@@ -30,40 +30,41 @@
         </div>
     </div>
 
-    <div id="victorModal" class="modal fade">
+    <div id="victorModal{{room.pk}}" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-body">
-                    <h6 class="display-6">Reports History:</h6>
-                    <div>
-                        <ul class="list-group list-group-flush">
-                        {% for report in room.reports.all %}
-                        <li class="list-group-item">
-                            <p class="font-weight-bold">{{report.usuario}}</p>                           
-                            <ul class="list-group list-group-horizontal">
-                                {% for treport in report.motives.all %}
-                                    <li class="list-group-item">{{treport.name}}</li>
+                <form method="POST" action="manageReportsDelete/{{room.pk}}">
+                    <div class="modal-body">
+                        <h6 class="display-6">Reports History:</h6>
+                        <div>
+                            <ul class="list-group list-group-flush">
+                                {% for report in room.reports.all %}
+                                <li class="list-group-item">
+                                    <p class="font-weight-bold">{{report.usuario}}</p>
+                                    <ul class="list-group list-group-horizontal">
+                                        {% for treport in report.motives.all %}
+                                        <li class="list-group-item">{{treport.name}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    <p class="text-break">{{report.description}}</p>
+
+                                </li>
+
                                 {% endfor %}
                             </ul>
-                            <p class="text-break">{{report.description}}</p>
 
-                        </li>
-                            
-                        {% endfor %}
-                        </ul>
-                            
-                    </div>
-                    <div class="modal-body">
-                        <form method="POST" action="manageReportsDelete/{{room.pk}}">
+                        </div>
+                        <div class="modal-body">
                             {% csrf_token %}
                             {{ form_report_chatroom }}
-                    </div>
+                        </div>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Delete chatroom</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete chatroom</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
