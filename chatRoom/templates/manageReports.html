@@ -54,7 +54,7 @@
                             
                     </div>
                     <div class="modal-body">
-                        <form method="POST" action="reportRoom/{{chat.pk}}">
+                        <form method="POST" action="manageReportsDelete/{{room.pk}}">
                             {% csrf_token %}
                             {{ form_report_chatroom }}
                     </div>

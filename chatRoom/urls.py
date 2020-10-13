@@ -20,5 +20,6 @@ urlpatterns = [
 
     path('search/', include('haystack.urls')),
     path('manageReports/', views.manageReports, name='manageReports'),
+    path('manageReports/manageReportsDelete/<room_pk>', views.manageReportsDelete, name='manageReportsDelete'),
 ]
 
