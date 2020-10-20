@@ -55,7 +55,7 @@
     <div class="flex-row-around">
         <div class="chat-box">
             <div id="chat-log" class="w-100 h-50 pb-2 pt-2 overflow-auto" style="max-height: 50%"></div>
-            <form action="POST">
+            <form action="POST"  id="formularioSendMessage">
                 {% csrf_token %}
                 <div class="send-messagge-box w-100 container-center-no-m">
                     {% if chat.administrator.pk == user.pk %}

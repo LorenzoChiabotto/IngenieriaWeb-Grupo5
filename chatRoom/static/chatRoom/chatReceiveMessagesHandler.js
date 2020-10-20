@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                         x.querySelector("#imageMessage").remove();  
                         x.querySelector("#imageMessageLink").remove();
                         document.getElementById('chat-log').appendChild(x)  
-                    break;
+                        break;
                 case "ban_message":
                         var x = document.createElement('div')
                         x.style.display= 'flex'
@@ -85,6 +85,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                         x.querySelector("#imageMessage").remove();  
                         x.querySelector("#imageMessageLink").remove();
                         document.getElementById('chat-log').appendChild(x)
+                        break;
                     
                 default:
                     break;
