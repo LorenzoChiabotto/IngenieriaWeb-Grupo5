@@ -27,8 +27,8 @@ def home(request):
     try:
         request.user = User_validable.objects.get(user=User.objects.get(username=request.user))
     except:
-        pass
-    return render(request, 'home.html')
+        return render(request, 'home.html')
+    return redirect('chatRoom:roomsList')
 
 def login(request):
     try:
