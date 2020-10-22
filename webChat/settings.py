@@ -135,19 +135,21 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS= True
 EMAIL_PORT = 587
 EMAIL_HOST_USER ="tusitioWebChat@gmail.com"
-EMAIL_HOST_PASSWORD = "Esternocleidomastoeideo2"
-
-#RECAPTCHA_PUBLIC_KEY = ''
-#RECAPTCHA_PRIVATE_KEY = ''
-SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
-
+EMAIL_HOST_PASSWORD = os.environ.get("PASSWORD_MAIL", "password de mentira por default")
 
 django_heroku.settings(locals())
+
+if not os.environ.get("EN_HEROKU", False):
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    RECAPTCHA_PUBLIC_KEY = os.environ.get("RECAPTCHA_PUBLIC_KEY", "RECAPTCHA_PUBLIC_KEY")
+    RECAPTCHA_PRIVATE_KEY = os.environ.get("RECAPTCHA_PRIVATE_KEY", "RECAPTCHA_PRIVATE_KEY")
 
 if os.environ.get('SEARCHBOX_URL'):
     HAYSTACK_CONNECTIONS = {
