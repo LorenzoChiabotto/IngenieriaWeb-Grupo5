@@ -12,5 +12,5 @@ ENV EN_DOCKER=True
 RUN mkdir /data
 COPY db.sqlite3 /data
 
-CMD ["python", "manage.py", "migrate"]
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+ENTRYPOINT ["/webChat/entrypoint.sh"]
+CMD ["run"]
