@@ -4,13 +4,13 @@ RUN mkdir /webChat
 WORKDIR /webChat
 
 COPY . /webChat
+RUN rm db.sqlite3
 
 RUN pip install -r requirements.txt
 
 ENV EN_DOCKER=True
 
 RUN mkdir /data
-COPY db.sqlite3 /data
 
 ENTRYPOINT ["/webChat/entrypoint.sh"]
 CMD ["run"]
