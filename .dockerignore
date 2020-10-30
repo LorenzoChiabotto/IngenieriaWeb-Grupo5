@@ -1,0 +1,9 @@
+db.sqlite3
+.env
+.gitignore
+erd.dot
+Procfile
+README.md
+robots.txt
+/media/
+/__pycache__/

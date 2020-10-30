@@ -4,7 +4,6 @@ RUN mkdir /webChat
 WORKDIR /webChat
 
 COPY . /webChat
-RUN rm db.sqlite3
 
 RUN pip install -r requirements.txt
 
