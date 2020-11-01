@@ -93,7 +93,6 @@ if not os.environ.get("EN_DOCKER", False):
         }
     }
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-    MEDIA_URL = '/media/'
 else:
     DATABASES = {
         'default': {
@@ -102,8 +101,8 @@ else:
         }
     }
     MEDIA_ROOT = os.path.join(BASE_DIR, '..',  'data','media')
-    MEDIA_URL = '/data/media/'
 
+MEDIA_URL = '/media/'
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 

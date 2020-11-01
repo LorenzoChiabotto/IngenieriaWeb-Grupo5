@@ -11,5 +11,5 @@ ENV EN_DOCKER=True
 
 RUN mkdir /data
 
-ENTRYPOINT ["/webChat/entrypoint.sh"]
-CMD ["run"]
+
+CMD ["python" , "manage.py" , "runserver" , "0.0.0.0:8000"]
